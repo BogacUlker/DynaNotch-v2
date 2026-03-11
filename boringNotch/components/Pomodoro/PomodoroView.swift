@@ -131,12 +131,12 @@ struct PomodoroView: View {
                 statBadge(
                     icon: "checkmark.circle.fill",
                     value: "\(manager.todayCycles)",
-                    label: "Cycles"
+                    label: String(localized: "Cycles")
                 )
                 statBadge(
                     icon: "clock.fill",
                     value: "\(manager.todayFocusMinutes)m",
-                    label: "Focus"
+                    label: String(localized: "Focus")
                 )
             }
 

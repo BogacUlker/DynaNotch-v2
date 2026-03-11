@@ -253,14 +253,14 @@ class PomodoroManager: ObservableObject {
 
         switch completedPhase {
         case .work:
-            content.title = "Work Session Complete"
-            content.body = "Time for a break! You've completed \(completedCycles) cycle\(completedCycles == 1 ? "" : "s")."
+            content.title = String(localized: "Work Session Complete")
+            content.body = String(localized: "Time for a break! You've completed \(completedCycles) cycle(s).")
         case .shortBreak:
-            content.title = "Break Over"
-            content.body = "Ready to focus? Start your next work session."
+            content.title = String(localized: "Break Over")
+            content.body = String(localized: "Ready to focus? Start your next work session.")
         case .longBreak:
-            content.title = "Long Break Over"
-            content.body = "Great job! Ready for a fresh set of cycles."
+            content.title = String(localized: "Long Break Over")
+            content.body = String(localized: "Great job! Ready for a fresh set of cycles.")
         }
 
         let request = UNNotificationRequest(

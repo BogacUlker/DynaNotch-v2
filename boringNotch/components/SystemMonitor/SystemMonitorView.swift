@@ -229,10 +229,10 @@ private struct MemoryWidget: View {
 
             // Breakdown
             VStack(alignment: .leading, spacing: 3) {
-                memRow(color: .blue, label: "App", value: SystemMonitorManager.formatGB(manager.ramAppGB))
-                memRow(color: .orange, label: "Wired", value: SystemMonitorManager.formatGB(manager.ramWiredGB))
-                memRow(color: .purple, label: "Compressed", value: SystemMonitorManager.formatGB(manager.ramCompressedGB))
-                memRow(color: .gray.opacity(0.4), label: "Free", value: SystemMonitorManager.formatGB(manager.ramFreeGB))
+                memRow(color: .blue, label: String(localized: "App"), value: SystemMonitorManager.formatGB(manager.ramAppGB))
+                memRow(color: .orange, label: String(localized: "Wired"), value: SystemMonitorManager.formatGB(manager.ramWiredGB))
+                memRow(color: .purple, label: String(localized: "Compressed"), value: SystemMonitorManager.formatGB(manager.ramCompressedGB))
+                memRow(color: .gray.opacity(0.4), label: String(localized: "Free"), value: SystemMonitorManager.formatGB(manager.ramFreeGB))
             }
 
             Spacer(minLength: 0)
@@ -373,8 +373,8 @@ private struct DiskWidget: View {
 
             // I/O speeds
             VStack(alignment: .leading, spacing: 2) {
-                ioRow(icon: "arrow.down.doc", label: "Read", value: SystemMonitorManager.formatSpeed(manager.diskReadSpeed), color: .green)
-                ioRow(icon: "arrow.up.doc", label: "Write", value: SystemMonitorManager.formatSpeed(manager.diskWriteSpeed), color: .orange)
+                ioRow(icon: "arrow.down.doc", label: String(localized: "Read"), value: SystemMonitorManager.formatSpeed(manager.diskReadSpeed), color: .green)
+                ioRow(icon: "arrow.up.doc", label: String(localized: "Write"), value: SystemMonitorManager.formatSpeed(manager.diskWriteSpeed), color: .orange)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -441,10 +441,10 @@ private struct BatteryHealthWidget: View {
             .frame(width: 56, height: 56)
 
             VStack(spacing: 2) {
-                statRow(label: "Cycles", value: "\(manager.batteryCycleCount)")
-                statRow(label: "Status", value: manager.batteryCondition)
+                statRow(label: String(localized: "Cycles"), value: "\(manager.batteryCycleCount)")
+                statRow(label: String(localized: "Status"), value: manager.batteryCondition)
                 if let temp = manager.batteryTemperature {
-                    statRow(label: "Temp", value: String(format: "%.0f\u{00B0}C", temp))
+                    statRow(label: String(localized: "Temp"), value: String(format: "%.0f\u{00B0}C", temp))
                 }
             }
         }

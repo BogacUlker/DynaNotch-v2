@@ -88,12 +88,12 @@
 
 | # | Sorun | Örnekler | Durum |
 |---|-------|----------|-------|
-| 31 | Pomodoro bildirimleri hardcoded İngilizce | "Focus time!", "Break time!" | ⏳ |
-| 32 | Hava durumu açıklamaları lokalize değil | Sıcaklık, açıklama metinleri | ⏳ |
-| 33 | Batarya durumu stringleri | "Normal", "Service Recommended", "Service Required" | ⏳ |
-| 34 | System Monitor widget etiketleri | "CPU Overview", "Memory", "Network" vb. | ⏳ |
-| 35 | Takvim stringleri | "No events today", "All-day", "Enjoy your free time!" | ⏳ |
-| 36 | Ayarlar/düzenleme paneli | "Edit layout", "Close", "Clear slot" vb. | ⏳ |
+| 31 | ~~Pomodoro bildirimleri hardcoded İngilizce~~ | "Focus time!", "Break time!" | ✅ |
+| 32 | ~~Hava durumu açıklamaları lokalize değil~~ | SwiftUI `Text("...")` otomatik lokalize eder | ✅ |
+| 33 | ~~Batarya durumu stringleri~~ | "Normal", "Service Recommended", "Service Required" | ✅ |
+| 34 | ~~System Monitor widget etiketleri~~ | "CPU Overview", "Memory", "Network" vb. | ✅ |
+| 35 | ~~Takvim stringleri~~ | "No events today", "All-day", "Enjoy your free time!" | ✅ |
+| 36 | ~~Ayarlar/düzenleme paneli~~ | SwiftUI `Text("...")`/`Label("...")` otomatik lokalize eder | ✅ |
 
 **Çözüm:** Tüm kullanıcıya görünen metinleri `Localizable.xcstrings` üzerinden yönet.
 
@@ -140,8 +140,8 @@
 | 🟡 ÖNEMLİ — Hata yönetimi | 6 madde | 5 ✅ |
 | 🟡 ÖNEMLİ — Performans | 3 madde | 2 ✅ |
 | 🟡 ÖNEMLİ — Lifecycle | 3 madde | 0 |
-| 🟢 İYİLEŞTİRME — Lokalizasyon | 6 madde | 0 |
+| 🟢 İYİLEŞTİRME — Lokalizasyon | 6 madde | 6 ✅ |
 | 🟢 İYİLEŞTİRME — Erişilebilirlik | 2 madde | 0 |
 | 🟢 İYİLEŞTİRME — Kod temizliği | 4 madde | 0 |
 | 🟢 İYİLEŞTİRME — Swift 6 | 2 madde | 0 |
-| **TOPLAM** | **44 madde** | **24 çözüldü** |
+| **TOPLAM** | **44 madde** | **30 çözüldü** |

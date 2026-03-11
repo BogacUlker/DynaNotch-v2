@@ -22,12 +22,12 @@ enum SystemMonitorWidgetKind: String, CaseIterable, Defaults.Serializable {
 
     var label: String {
         switch self {
-        case .cpuOverview: return "CPU Overview"
-        case .cpuHistory: return "CPU History"
-        case .memoryBreakdown: return "Memory"
-        case .networkLive: return "Network"
-        case .diskActivity: return "Disk"
-        case .batteryHealth: return "Battery Health"
+        case .cpuOverview: return String(localized: "CPU Overview")
+        case .cpuHistory: return String(localized: "CPU History")
+        case .memoryBreakdown: return String(localized: "Memory")
+        case .networkLive: return String(localized: "Network")
+        case .diskActivity: return String(localized: "Disk")
+        case .batteryHealth: return String(localized: "Battery Health")
         }
     }
 }
@@ -425,11 +425,11 @@ class SystemMonitorManager: ObservableObject {
 
         let condition: String
         if batteryHealth > 80 {
-            condition = "Normal"
+            condition = String(localized: "Normal")
         } else if batteryHealth > 60 {
-            condition = "Service Recommended"
+            condition = String(localized: "Service Recommended")
         } else {
-            condition = "Service Required"
+            condition = String(localized: "Service Required")
         }
         if batteryCondition != condition { batteryCondition = condition }
     }
