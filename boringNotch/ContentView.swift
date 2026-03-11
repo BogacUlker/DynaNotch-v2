@@ -25,6 +25,7 @@ struct ContentView: View {
     @ObservedObject var volumeManager = VolumeManager.shared
     @ObservedObject var pomodoroManager = PomodoroManager.shared
     @ObservedObject var weatherManager = WeatherManager.shared
+    @ObservedObject var sportsManager = SportsManager.shared
     @State private var hoverTask: Task<Void, Never>?
     @State private var isHovering: Bool = false
     @State private var anyDropDebounceTask: Task<Void, Never>?
@@ -292,8 +293,11 @@ struct ContentView: View {
                       } else if vm.notchState == .closed && !vm.hideOnClosed && !coordinator.expandingView.show && pomodoroManager.timerState != .idle && !(musicManager.isPlaying || !musicManager.isPlayerIdle) {
                           PomodoroClosedNotchView()
                               .frame(alignment: .center)
-                      } else if vm.notchState == .closed && !vm.hideOnClosed && !coordinator.expandingView.show && Defaults[.enableWeather] && weatherManager.temperature != nil && !(musicManager.isPlaying || !musicManager.isPlayerIdle) && pomodoroManager.timerState == .idle {
+                      } else if vm.notchState == .closed && !vm.hideOnClosed && !coordinator.expandingView.show && Defaults[.enableWeather] && weatherManager.temperature != nil && !(musicManager.isPlaying || !musicManager.isPlayerIdle) && pomodoroManager.timerState == .idle && !sportsManager.hasLiveEvent {
                           WeatherClosedNotchView()
+                              .frame(alignment: .center)
+                      } else if vm.notchState == .closed && !vm.hideOnClosed && !coordinator.expandingView.show && sportsManager.hasLiveEvent && !(musicManager.isPlaying || !musicManager.isPlayerIdle) && pomodoroManager.timerState == .idle {
+                          SportsClosedNotchView()
                               .frame(alignment: .center)
                       } else if (!coordinator.expandingView.show || coordinator.expandingView.type == .music) && vm.notchState == .closed && (musicManager.isPlaying || !musicManager.isPlayerIdle) && coordinator.musicLiveActivityEnabled && !vm.hideOnClosed {
                           MusicLiveActivity()
@@ -363,7 +367,7 @@ struct ContentView: View {
                       }
                   }
               }
-              .conditionalModifier((coordinator.sneakPeek.show && (coordinator.sneakPeek.type == .music) && vm.notchState == .closed && !vm.hideOnClosed && Defaults[.sneakPeekStyles] == .standard) || (coordinator.sneakPeek.show && (coordinator.sneakPeek.type != .music) && (vm.notchState == .closed)) || (enableLyrics && showLyricsOnClosedNotch && !musicManager.syncedLyrics.isEmpty && musicManager.isPlaying && vm.notchState == .closed && !vm.hideOnClosed && coordinator.musicLiveActivityEnabled && !coordinator.sneakPeek.show) || (vm.notchState == .closed && !vm.hideOnClosed && pomodoroManager.timerState != .idle) || (vm.notchState == .closed && !vm.hideOnClosed && Defaults[.enableWeather] && weatherManager.temperature != nil)) { view in
+              .conditionalModifier((coordinator.sneakPeek.show && (coordinator.sneakPeek.type == .music) && vm.notchState == .closed && !vm.hideOnClosed && Defaults[.sneakPeekStyles] == .standard) || (coordinator.sneakPeek.show && (coordinator.sneakPeek.type != .music) && (vm.notchState == .closed)) || (enableLyrics && showLyricsOnClosedNotch && !musicManager.syncedLyrics.isEmpty && musicManager.isPlaying && vm.notchState == .closed && !vm.hideOnClosed && coordinator.musicLiveActivityEnabled && !coordinator.sneakPeek.show) || (vm.notchState == .closed && !vm.hideOnClosed && pomodoroManager.timerState != .idle) || (vm.notchState == .closed && !vm.hideOnClosed && Defaults[.enableWeather] && weatherManager.temperature != nil) || (vm.notchState == .closed && !vm.hideOnClosed && sportsManager.hasLiveEvent)) { view in
                   view
                       .fixedSize()
               }
@@ -379,6 +383,8 @@ struct ContentView: View {
                         PomodoroView()
                     case .weather:
                         WeatherView()
+                    case .sports:
+                        SportsView()
                     }
                 }
                 .transition(
@@ -479,6 +485,35 @@ struct ContentView: View {
             .frame(width: 60, alignment: .trailing)
         }
         .frame(height: vm.effectiveClosedNotchHeight, alignment: .center)
+    }
+
+    @ViewBuilder
+    func SportsClosedNotchView() -> some View {
+        if let text = sportsManager.currentCollapsedText {
+            HStack(spacing: 0) {
+                HStack(spacing: 3) {
+                    Circle()
+                        .fill(Color.red)
+                        .frame(width: 4, height: 4)
+                    Text(text)
+                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                        .foregroundColor(.white)
+                        .lineLimit(1)
+                }
+
+                Rectangle()
+                    .fill(.black)
+                    .frame(width: vm.closedNotchSize.width + 10)
+
+                HStack(spacing: 2) {
+                    Image(systemName: "sportscourt.fill")
+                        .font(.system(size: 9))
+                        .foregroundStyle(.green.opacity(0.7))
+                }
+                .frame(width: 40, alignment: .trailing)
+            }
+            .frame(height: vm.effectiveClosedNotchHeight, alignment: .center)
+        }
     }
 
     func MusicLiveActivity() -> some View {

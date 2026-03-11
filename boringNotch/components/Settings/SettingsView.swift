@@ -57,6 +57,9 @@ struct SettingsView: View {
                 NavigationLink(value: "Weather") {
                     Label("Weather", systemImage: "cloud.sun.fill")
                 }
+                NavigationLink(value: "Sports") {
+                    Label("Sports", systemImage: "sportscourt.fill")
+                }
                 NavigationLink(value: "Shortcuts") {
                     Label("Shortcuts", systemImage: "keyboard")
                 }
@@ -95,6 +98,8 @@ struct SettingsView: View {
                     PomodoroSettings()
                 case "Weather":
                     WeatherSettings()
+                case "Sports":
+                    SportsSettings()
                 case "Shortcuts":
                     Shortcuts()
                 case "Extensions":

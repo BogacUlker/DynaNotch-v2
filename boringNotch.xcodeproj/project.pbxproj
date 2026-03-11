@@ -147,6 +147,18 @@
 		B1A000042EF0000100000004 /* PomodoroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A000022EF0000100000002 /* PomodoroView.swift */; };
 		B1A000082EF0000200000008 /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A000062EF0000200000006 /* WeatherManager.swift */; };
 		B1A000092EF0000200000009 /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A000072EF0000200000007 /* WeatherView.swift */; };
+		B1B00021EF0000300000021 /* SportModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00011EF0000300000011 /* SportModels.swift */; };
+		B1B00022EF0000300000022 /* FootballModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00012EF0000300000012 /* FootballModels.swift */; };
+		B1B00023EF0000300000023 /* BasketballModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00013EF0000300000013 /* BasketballModels.swift */; };
+		B1B00024EF0000300000024 /* F1Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00014EF0000300000014 /* F1Models.swift */; };
+		B1B00025EF0000300000025 /* SportProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00015EF0000300000015 /* SportProvider.swift */; };
+		B1B00026EF0000300000026 /* FootballProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00016EF0000300000016 /* FootballProvider.swift */; };
+		B1B00027EF0000300000027 /* BasketballProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00017EF0000300000017 /* BasketballProvider.swift */; };
+		B1B00028EF0000300000028 /* EuroLeagueProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00018EF0000300000018 /* EuroLeagueProvider.swift */; };
+		B1B00029EF0000300000029 /* F1Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00019EF0000300000019 /* F1Provider.swift */; };
+		B1B0002AEF000030000002A /* SportsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B0001AEF000030000001A /* SportsManager.swift */; };
+		B1B0002BEF000030000002B /* SportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B0001BEF000030000001B /* SportsView.swift */; };
+		B1B0002CEF000030000002C /* SportsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B0001CEF000030000001C /* SportsSettings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -317,6 +329,18 @@
 		B1A000022EF0000100000002 /* PomodoroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomodoroView.swift; sourceTree = "<group>"; };
 		B1A000062EF0000200000006 /* WeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManager.swift; sourceTree = "<group>"; };
 		B1A000072EF0000200000007 /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
+		B1B00011EF0000300000011 /* SportModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportModels.swift; sourceTree = "<group>"; };
+		B1B00012EF0000300000012 /* FootballModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootballModels.swift; sourceTree = "<group>"; };
+		B1B00013EF0000300000013 /* BasketballModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketballModels.swift; sourceTree = "<group>"; };
+		B1B00014EF0000300000014 /* F1Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = F1Models.swift; sourceTree = "<group>"; };
+		B1B00015EF0000300000015 /* SportProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportProvider.swift; sourceTree = "<group>"; };
+		B1B00016EF0000300000016 /* FootballProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootballProvider.swift; sourceTree = "<group>"; };
+		B1B00017EF0000300000017 /* BasketballProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketballProvider.swift; sourceTree = "<group>"; };
+		B1B00018EF0000300000018 /* EuroLeagueProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EuroLeagueProvider.swift; sourceTree = "<group>"; };
+		B1B00019EF0000300000019 /* F1Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = F1Provider.swift; sourceTree = "<group>"; };
+		B1B0001AEF000030000001A /* SportsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportsManager.swift; sourceTree = "<group>"; };
+		B1B0001BEF000030000001B /* SportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportsView.swift; sourceTree = "<group>"; };
+		B1B0001CEF000030000001C /* SportsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportsSettings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -491,7 +515,42 @@
 			path = sizing;
 			sourceTree = "<group>";
 		};
-			B1A0000A2EF0000200000010 /* Weather */ = {
+			B1B00030EF0000300000030 /* Sports */ = {
+			isa = PBXGroup;
+			children = (
+				B1B00031EF0000300000031 /* Models */,
+				B1B00032EF0000300000032 /* Providers */,
+				B1B0001AEF000030000001A /* SportsManager.swift */,
+				B1B0001BEF000030000001B /* SportsView.swift */,
+				B1B0001CEF000030000001C /* SportsSettings.swift */,
+			);
+			path = Sports;
+			sourceTree = "<group>";
+		};
+		B1B00031EF0000300000031 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B1B00011EF0000300000011 /* SportModels.swift */,
+				B1B00012EF0000300000012 /* FootballModels.swift */,
+				B1B00013EF0000300000013 /* BasketballModels.swift */,
+				B1B00014EF0000300000014 /* F1Models.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		B1B00032EF0000300000032 /* Providers */ = {
+			isa = PBXGroup;
+			children = (
+				B1B00015EF0000300000015 /* SportProvider.swift */,
+				B1B00016EF0000300000016 /* FootballProvider.swift */,
+				B1B00017EF0000300000017 /* BasketballProvider.swift */,
+				B1B00018EF0000300000018 /* EuroLeagueProvider.swift */,
+				B1B00019EF0000300000019 /* F1Provider.swift */,
+			);
+			path = Providers;
+			sourceTree = "<group>";
+		};
+		B1A0000A2EF0000200000010 /* Weather */ = {
 			isa = PBXGroup;
 			children = (
 				B1A000062EF0000200000006 /* WeatherManager.swift */,
@@ -514,6 +573,7 @@
 			children = (
 				B1A0000A2EF0000200000010 /* Weather */,
 				B1A000052EF0000100000005 /* Pomodoro */,
+				B1B00030EF0000300000030 /* Sports */,
 				B141C23B2CA5F50900AC8CC8 /* Onboarding */,
 				B1C448992C97375A001F0858 /* Tips */,
 				14C08BB72C8DE49E000F8AA0 /* Calendar */,
@@ -992,6 +1052,18 @@
 				B1A000042EF0000100000004 /* PomodoroView.swift in Sources */,
 				B1A000082EF0000200000008 /* WeatherManager.swift in Sources */,
 				B1A000092EF0000200000009 /* WeatherView.swift in Sources */,
+				B1B00021EF0000300000021 /* SportModels.swift in Sources */,
+				B1B00022EF0000300000022 /* FootballModels.swift in Sources */,
+				B1B00023EF0000300000023 /* BasketballModels.swift in Sources */,
+				B1B00024EF0000300000024 /* F1Models.swift in Sources */,
+				B1B00025EF0000300000025 /* SportProvider.swift in Sources */,
+				B1B00026EF0000300000026 /* FootballProvider.swift in Sources */,
+				B1B00027EF0000300000027 /* BasketballProvider.swift in Sources */,
+				B1B00028EF0000300000028 /* EuroLeagueProvider.swift in Sources */,
+				B1B00029EF0000300000029 /* F1Provider.swift in Sources */,
+				B1B0002AEF000030000002A /* SportsManager.swift in Sources */,
+				B1B0002BEF000030000002B /* SportsView.swift in Sources */,
+				B1B0002CEF000030000002C /* SportsSettings.swift in Sources */,
 				9AB0C6BD2C73C9CB00F7CD30 /* NotchHomeView.swift in Sources */,
 				B172AAC02C95DA0B001623F1 /* InlineHUD.swift in Sources */,
 				14E9FEAA2C70BF610062E83F /* DownloadView.swift in Sources */,

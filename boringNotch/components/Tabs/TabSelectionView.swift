@@ -14,25 +14,37 @@ struct TabModel: Identifiable {
     let view: NotchViews
 }
 
-let tabs = [
+/// Core tabs on the left side of the notch
+let leftTabs = [
     TabModel(label: "Home", icon: "house.fill", view: .home),
     TabModel(label: "Shelf", icon: "tray.fill", view: .shelf),
-    TabModel(label: "Pomodoro", icon: "timer", view: .pomodoro),
     TabModel(label: "Weather", icon: "cloud.sun.fill", view: .weather),
 ]
 
+/// Feature tabs on the right side of the notch
+let rightTabs = [
+    TabModel(label: "Pomodoro", icon: "timer", view: .pomodoro),
+    TabModel(label: "Sports", icon: "sportscourt.fill", view: .sports),
+]
+
 struct TabSelectionView: View {
+    let items: [TabModel]
     @ObservedObject var coordinator = BoringViewCoordinator.shared
     @Namespace var animation
+
+    init(items: [TabModel]? = nil) {
+        self.items = items ?? leftTabs
+    }
+
     var body: some View {
         HStack(spacing: 0) {
-            ForEach(tabs) { tab in
+            ForEach(items) { tab in
                     TabButton(label: tab.label, icon: tab.icon, selected: coordinator.currentView == tab.view) {
                         withAnimation(.smooth) {
                             coordinator.currentView = tab.view
                         }
                     }
-                    .frame(height: 26)
+                    .frame(height: 22)
                     .foregroundStyle(tab.view == coordinator.currentView ? .white : .gray)
                     .background {
                         if tab.view == coordinator.currentView {

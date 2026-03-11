@@ -29,6 +29,7 @@ public enum NotchViews {
     case shelf
     case pomodoro
     case weather
+    case sports
 }
 
 enum SettingsEnum {

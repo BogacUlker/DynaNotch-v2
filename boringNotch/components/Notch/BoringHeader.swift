@@ -13,11 +13,16 @@ struct BoringHeader: View {
     @ObservedObject var batteryModel = BatteryStatusViewModel.shared
     @ObservedObject var coordinator = BoringViewCoordinator.shared
     @StateObject var tvm = ShelfStateViewModel.shared
+
+    private var showTabs: Bool {
+        ((!tvm.isEmpty || coordinator.alwaysShowTabs) && Defaults[.boringShelf]) || coordinator.currentView == .pomodoro || coordinator.currentView == .weather || coordinator.currentView == .sports
+    }
+
     var body: some View {
         HStack(spacing: 0) {
             HStack {
-                if ((!tvm.isEmpty || coordinator.alwaysShowTabs) && Defaults[.boringShelf]) || coordinator.currentView == .pomodoro || coordinator.currentView == .weather {
-                    TabSelectionView()
+                if showTabs {
+                    TabSelectionView(items: leftTabs)
                 } else if vm.notchState == .open {
                     EmptyView()
                 }
@@ -36,24 +41,26 @@ struct BoringHeader: View {
                     }
             }
 
-            HStack(spacing: 4) {
+            HStack(spacing: 2) {
                 if vm.notchState == .open {
                     if isHUDType(coordinator.sneakPeek.type) && coordinator.sneakPeek.show && Defaults[.showOpenNotchHUD] {
                         OpenNotchHUD(type: $coordinator.sneakPeek.type, value: $coordinator.sneakPeek.value, icon: $coordinator.sneakPeek.icon)
                             .transition(.scale(scale: 0.8).combined(with: .opacity))
                     } else {
+                        if showTabs {
+                            TabSelectionView(items: rightTabs)
+                        }
                         if Defaults[.showMirror] {
                             Button(action: {
                                 vm.toggleCameraPreview()
                             }) {
                                 Capsule()
                                     .fill(.black)
-                                    .frame(width: 30, height: 30)
+                                    .frame(width: 24, height: 24)
                                     .overlay {
                                         Image(systemName: "web.camera")
                                             .foregroundColor(.white)
-                                            .padding()
-                                            .imageScale(.medium)
+                                            .imageScale(.small)
                                     }
                             }
                             .buttonStyle(PlainButtonStyle())
@@ -64,19 +71,18 @@ struct BoringHeader: View {
                             }) {
                                 Capsule()
                                     .fill(.black)
-                                    .frame(width: 30, height: 30)
+                                    .frame(width: 24, height: 24)
                                     .overlay {
                                         Image(systemName: "gear")
                                             .foregroundColor(.white)
-                                            .padding()
-                                            .imageScale(.medium)
+                                            .imageScale(.small)
                                     }
                             }
                             .buttonStyle(PlainButtonStyle())
                         }
                         if Defaults[.showBatteryIndicator] {
                             BoringBatteryView(
-                                batteryWidth: 30,
+                                batteryWidth: 24,
                                 isCharging: batteryModel.isCharging,
                                 isInLowPowerMode: batteryModel.isInLowPowerMode,
                                 isPluggedIn: batteryModel.isPluggedIn,
@@ -89,7 +95,7 @@ struct BoringHeader: View {
                     }
                 }
             }
-            .font(.system(.headline, design: .rounded))
+            .font(.system(.subheadline, design: .rounded))
             .frame(maxWidth: .infinity, alignment: .trailing)
             .opacity(vm.notchState == .closed ? 0 : 1)
             .blur(radius: vm.notchState == .closed ? 20 : 0)
