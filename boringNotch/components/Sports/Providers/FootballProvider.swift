@@ -146,7 +146,7 @@ final class FootballProvider: SportProvider {
         df.dateFormat = "yyyyMMdd"
         let from = df.string(from: Date())
         let to = df.string(from: Date().addingTimeInterval(14 * 86400))
-        let url = URL(string: "https://site.api.espn.com/apis/site/v2/sports/soccer/\(league)/scoreboard?dates=\(from)-\(to)")!
+        guard let url = URL(string: "https://site.api.espn.com/apis/site/v2/sports/soccer/\(league)/scoreboard?dates=\(from)-\(to)") else { return [] }
         let (data, _) = try await URLSession.shared.data(from: url)
         let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] ?? [:]
         let events = json["events"] as? [[String: Any]] ?? []
@@ -154,7 +154,7 @@ final class FootballProvider: SportProvider {
     }
 
     private func fetchStandings(league: String) async throws -> [FootballStanding] {
-        let url = URL(string: "https://site.api.espn.com/apis/v2/sports/soccer/\(league)/standings")!
+        guard let url = URL(string: "https://site.api.espn.com/apis/v2/sports/soccer/\(league)/standings") else { return [] }
         let (data, _) = try await URLSession.shared.data(from: url)
         let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] ?? [:]
         let children = json["children"] as? [[String: Any]] ?? []

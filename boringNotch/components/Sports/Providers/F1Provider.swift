@@ -113,7 +113,7 @@ final class F1Provider: SportProvider {
 
     private func refreshLiveSession() async {
         do {
-            let sessURL = URL(string: "https://api.openf1.org/v1/sessions?session_key=latest")!
+            guard let sessURL = URL(string: "https://api.openf1.org/v1/sessions?session_key=latest") else { return }
             let (sessData, _) = try await URLSession.shared.data(from: sessURL)
             let sessArr = try JSONSerialization.jsonObject(with: sessData) as? [[String: Any]] ?? []
             guard let sessInfo = sessArr.first else {
@@ -147,7 +147,7 @@ final class F1Provider: SportProvider {
             )
 
             if isLive {
-                let posURL = URL(string: "https://api.openf1.org/v1/position?session_key=\(sessionKey)&position<=20")!
+                guard let posURL = URL(string: "https://api.openf1.org/v1/position?session_key=\(sessionKey)&position<=20") else { return }
                 let (posData, _) = try await URLSession.shared.data(from: posURL)
                 let posArr = try JSONSerialization.jsonObject(with: posData) as? [[String: Any]] ?? []
                 var latest: [Int: [String: Any]] = [:]
@@ -194,7 +194,7 @@ final class F1Provider: SportProvider {
 
     private func refreshCalendar() async {
         do {
-            let url = URL(string: "https://api.jolpi.ca/ergast/f1/current.json")!
+            guard let url = URL(string: "https://api.jolpi.ca/ergast/f1/current.json") else { return }
             let (data, _) = try await URLSession.shared.data(from: url)
             let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] ?? [:]
             let mrData = json["MRData"] as? [String: Any] ?? [:]
@@ -209,7 +209,7 @@ final class F1Provider: SportProvider {
 
     private func refreshDriverStandings() async {
         do {
-            let url = URL(string: "https://api.jolpi.ca/ergast/f1/current/driverStandings.json")!
+            guard let url = URL(string: "https://api.jolpi.ca/ergast/f1/current/driverStandings.json") else { return }
             let (data, _) = try await URLSession.shared.data(from: url)
             let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] ?? [:]
             let mrData = json["MRData"] as? [String: Any] ?? [:]
@@ -229,7 +229,7 @@ final class F1Provider: SportProvider {
 
     private func refreshConstructorStandings() async {
         do {
-            let url = URL(string: "https://api.jolpi.ca/ergast/f1/current/constructorStandings.json")!
+            guard let url = URL(string: "https://api.jolpi.ca/ergast/f1/current/constructorStandings.json") else { return }
             let (data, _) = try await URLSession.shared.data(from: url)
             let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] ?? [:]
             let mrData = json["MRData"] as? [String: Any] ?? [:]

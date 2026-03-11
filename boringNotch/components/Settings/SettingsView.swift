@@ -1369,10 +1369,11 @@ struct Appearance: View {
                             }
 
                             Button {
+                                guard let parsedURL = URL(string: url) else { return }
                                 let visualizer: CustomVisualizer = .init(
                                     UUID: UUID(),
                                     name: name,
-                                    url: URL(string: url)!,
+                                    url: parsedURL,
                                     speed: speed
                                 )
 

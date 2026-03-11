@@ -223,7 +223,9 @@ class BatteryActivityManager {
                 throw BatteryError.batteryInfoUnavailable("No power sources available")
             }
             
-            let source = sources.first!
+            guard let source = sources.first else {
+                throw BatteryError.batteryInfoUnavailable("No power sources found")
+            }
             
             guard let description = IOPSGetPowerSourceDescription(snapshot, source)?.takeUnretainedValue() as? [String: Any] else {
                 throw BatteryError.batteryInfoUnavailable("Could not get power source description")

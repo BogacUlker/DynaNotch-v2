@@ -95,6 +95,9 @@ class SystemMonitorManager: ObservableObject {
     private var timer: AnyCancellable?
     private var enabledCancellable: AnyCancellable?
 
+    /// Cached Mach host port — avoids leaking a new send right every call.
+    private let hostPort: mach_port_t = mach_host_self()
+
     private var previousCPUTicks: (user: UInt32, system: UInt32, idle: UInt32, nice: UInt32)?
     private var previousPerCoreTicks: [(user: Double, system: Double, idle: Double, nice: Double)]?
     private var previousNetBytes: (sent: UInt64, received: UInt64)?
@@ -103,6 +106,9 @@ class SystemMonitorManager: ObservableObject {
     private var previousDiskTimestamp: Date?
 
     private let historyLimit = 30
+    /// Counts ticks so slow-changing metrics (battery, disk usage) only refresh every Nth cycle.
+    private var tickCount: Int = 0
+    private let slowMetricInterval = 5  // every 5 ticks = 10 seconds
 
     // MARK: - Init
 
@@ -133,6 +139,7 @@ class SystemMonitorManager: ObservableObject {
         previousNetTimestamp = nil
         previousDiskBytes = nil
         previousDiskTimestamp = nil
+        tickCount = 0  // ensures first collectMetrics runs slow metrics too
 
         collectMetrics()
 
@@ -152,13 +159,19 @@ class SystemMonitorManager: ObservableObject {
     // MARK: - Collection
 
     private func collectMetrics() {
+        // Fast metrics — every 2 seconds
         updateCPU()
         updatePerCoreCPU()
         updateRAM()
         updateNetwork()
-        updateDisk()
         updateDiskIO()
-        updateBattery()
+
+        // Slow metrics — every 10 seconds (battery/disk usage barely change)
+        if tickCount % slowMetricInterval == 0 {
+            updateDisk()
+            updateBattery()
+        }
+        tickCount += 1
     }
 
     // MARK: - CPU (Aggregate)
@@ -170,7 +183,7 @@ class SystemMonitorManager: ObservableObject {
         )
         let result = withUnsafeMutablePointer(to: &loadInfo) { ptr in
             ptr.withMemoryRebound(to: integer_t.self, capacity: Int(count)) { intPtr in
-                host_statistics(mach_host_self(), HOST_CPU_LOAD_INFO, intPtr, &count)
+                host_statistics(hostPort, HOST_CPU_LOAD_INFO, intPtr, &count)
             }
         }
         guard result == KERN_SUCCESS else { return }
@@ -205,7 +218,7 @@ class SystemMonitorManager: ObservableObject {
         var numCPUInfo: mach_msg_type_number_t = 0
 
         let result = host_processor_info(
-            mach_host_self(),
+            hostPort,
             PROCESSOR_CPU_LOAD_INFO,
             &numCPUs,
             &cpuInfo,
@@ -262,7 +275,7 @@ class SystemMonitorManager: ObservableObject {
         )
         let result = withUnsafeMutablePointer(to: &stats) { ptr in
             ptr.withMemoryRebound(to: integer_t.self, capacity: Int(count)) { intPtr in
-                host_statistics64(mach_host_self(), HOST_VM_INFO64, intPtr, &count)
+                host_statistics64(hostPort, HOST_VM_INFO64, intPtr, &count)
             }
         }
         guard result == KERN_SUCCESS else { return }
@@ -332,8 +345,10 @@ class SystemMonitorManager: ObservableObject {
             let attrs = try FileManager.default.attributesOfFileSystem(forPath: "/")
             if let totalSize = attrs[.systemSize] as? UInt64,
                let freeSize = attrs[.systemFreeSize] as? UInt64 {
-                diskTotalGB = Double(totalSize) / 1_073_741_824.0
-                diskUsedGB = Double(totalSize - freeSize) / 1_073_741_824.0
+                let total = Double(totalSize) / 1_073_741_824.0
+                let used = Double(totalSize - freeSize) / 1_073_741_824.0
+                if abs(diskTotalGB - total) > 0.01 { diskTotalGB = total }
+                if abs(diskUsedGB - used) > 0.01 { diskUsedGB = used }
             }
         } catch {
             logger.warning("[SYSMON] disk usage failed: \(error.localizedDescription)")
@@ -392,25 +407,30 @@ class SystemMonitorManager: ObservableObject {
         guard IORegistryEntryCreateCFProperties(service, &props, kCFAllocatorDefault, 0) == KERN_SUCCESS,
               let dict = props?.takeRetainedValue() as? [String: Any] else { return }
 
-        batteryCycleCount = dict["CycleCount"] as? Int ?? 0
+        let cycles = dict["CycleCount"] as? Int ?? 0
+        if batteryCycleCount != cycles { batteryCycleCount = cycles }
 
         let maxCap = dict["MaxCapacity"] as? Int ?? 0
         let designCap = dict["DesignCapacity"] as? Int ?? 0
         if designCap > 0 {
-            batteryHealth = (Double(maxCap) / Double(designCap)) * 100.0
+            let health = (Double(maxCap) / Double(designCap)) * 100.0
+            if abs(batteryHealth - health) > 0.01 { batteryHealth = health }
         }
 
         if let temp = dict["Temperature"] as? Int {
-            batteryTemperature = Double(temp) / 100.0
+            let t = Double(temp) / 100.0
+            if batteryTemperature != t { batteryTemperature = t }
         }
 
+        let condition: String
         if batteryHealth > 80 {
-            batteryCondition = "Normal"
+            condition = "Normal"
         } else if batteryHealth > 60 {
-            batteryCondition = "Service Recommended"
+            condition = "Service Recommended"
         } else {
-            batteryCondition = "Service Required"
+            condition = "Service Required"
         }
+        if batteryCondition != condition { batteryCondition = condition }
     }
 
     // MARK: - Formatting
