@@ -114,8 +114,8 @@
 
 | # | Sorun | Dosya | Satır | Durum |
 |---|-------|-------|-------|-------|
-| 39 | TODO yorumu: "Move all animations to this file" | `drop.swift` | 27 | ⏳ |
-| 40 | Kullanılmayan `runLoopSource: Unmanaged<CFRunLoopSource>?` property | `BatteryStatusViewModel.swift` | 12 | ⏳ |
+| 39 | ~~TODO yorumu: "Move all animations to this file"~~ | `drop.swift` | 27 | ✅ |
+| 40 | ~~Kullanılmayan `runLoopSource: Unmanaged<CFRunLoopSource>?` property~~ | `BatteryStatusViewModel.swift` | 12 | ✅ |
 | 41 | `ContentView` kapalı notch priority chain — 10 iç içe `if/else`, okunabilirlik çok düşük | `ContentView.swift` | — | ⏳ |
 | 42 | 23+ hardcoded RGB renk değeri (tema sistemi yok) | `SettingsView.swift`, `BoringCalendar.swift`, `WebcamView.swift` | çeşitli | ⏳ |
 
@@ -142,6 +142,6 @@
 | 🟡 ÖNEMLİ — Lifecycle | 3 madde | 0 |
 | 🟢 İYİLEŞTİRME — Lokalizasyon | 6 madde | 6 ✅ |
 | 🟢 İYİLEŞTİRME — Erişilebilirlik | 2 madde | 0 |
-| 🟢 İYİLEŞTİRME — Kod temizliği | 4 madde | 0 |
+| 🟢 İYİLEŞTİRME — Kod temizliği | 4 madde | 2 ✅ |
 | 🟢 İYİLEŞTİRME — Swift 6 | 2 madde | 0 |
-| **TOPLAM** | **44 madde** | **30 çözüldü** |
+| **TOPLAM** | **44 madde** | **32 çözüldü** |
