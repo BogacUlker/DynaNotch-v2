@@ -67,15 +67,16 @@ DynaNotch turns your MacBook's notch into an interactive hub — music controls,
 
 ### Download
 
-Download the latest `.dmg` from [Releases](https://github.com/BogacUlker/DynaNotch-v2/releases).
+1. Download the latest `.dmg` from [Releases](https://github.com/BogacUlker/DynaNotch-v2/releases).
+2. Open the DMG and drag **DynaNotch** to `/Applications`.
+3. On first launch, macOS will show a **"Cannot Be Opened"** warning because the app is not notarized. To open it:
+   - Go to **System Settings → Privacy & Security** and click **"Open Anyway"**
+   - Or run:
+     ```bash
+     xattr -dr com.apple.quarantine /Applications/DynaNotch.app
+     ```
 
-Move **DynaNotch** to `/Applications`, then bypass the quarantine flag:
-
-```bash
-xattr -dr com.apple.quarantine /Applications/boringNotch.app
-```
-
-Or via System Settings > Privacy & Security > Open Anyway.
+> **Why does this happen?** Apple requires a paid Developer Program membership ($99/year) for notarization. DynaNotch is a free, open-source project and is not currently enrolled. The app is safe — you can verify by [building from source](#building-from-source).
 
 ## Building from Source
 
