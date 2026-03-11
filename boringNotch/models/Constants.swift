@@ -36,6 +36,12 @@ enum HideNotchOption: String, Defaults.Serializable {
     case never
 }
 
+struct PomodoroDailyStats: Codable, Hashable, Equatable, Defaults.Serializable {
+    var date: String
+    var completedCycles: Int
+    var focusMinutes: Int
+}
+
 // Define notification names at file scope
 extension Notification.Name {
     static let mediaControllerChanged = Notification.Name("mediaControllerChanged")
@@ -129,6 +135,7 @@ extension Defaults.Keys {
     static let waitInterval = Key<Double>("waitInterval", default: 3)
     static let showShuffleAndRepeat = Key<Bool>("showShuffleAndRepeat", default: false)
     static let enableLyrics = Key<Bool>("enableLyrics", default: false)
+    static let showLyricsOnClosedNotch = Key<Bool>("showLyricsOnClosedNotch", default: false)
     static let musicControlSlots = Key<[MusicControlButton]>(
         "musicControlSlots",
         default: MusicControlButton.defaultLayout
@@ -199,4 +206,17 @@ extension Defaults.Keys {
     }
 
     static let didClearLegacyURLCacheV1 = Key<Bool>("didClearLegacyURLCache_v1", default: false)
+
+    // MARK: Pomodoro
+    static let pomodoroEnabled = Key<Bool>("pomodoroEnabled", default: false)
+    static let pomodoroWorkDuration = Key<TimeInterval>("pomodoroWorkDuration", default: 25 * 60)
+    static let pomodoroShortBreakDuration = Key<TimeInterval>("pomodoroShortBreakDuration", default: 5 * 60)
+    static let pomodoroLongBreakDuration = Key<TimeInterval>("pomodoroLongBreakDuration", default: 15 * 60)
+    static let pomodoroCyclesBeforeLongBreak = Key<Double>("pomodoroCyclesBeforeLongBreak", default: 4)
+    static let pomodoroNotifications = Key<Bool>("pomodoroNotifications", default: true)
+    static let pomodoroTaskName = Key<String>("pomodoroTaskName", default: "")
+    static let pomodoroWeeklyHistory = Key<[PomodoroDailyStats]>("pomodoroWeeklyHistory", default: [])
+    static let pomodoroTodayCycles = Key<Int>("pomodoroTodayCycles", default: 0)
+    static let pomodoroTodayFocusMinutes = Key<Int>("pomodoroTodayFocusMinutes", default: 0)
+    static let pomodoroTodayDate = Key<String>("pomodoroTodayDate", default: "")
 }

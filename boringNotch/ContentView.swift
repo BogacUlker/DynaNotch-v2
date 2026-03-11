@@ -23,6 +23,7 @@ struct ContentView: View {
     @ObservedObject var batteryModel = BatteryStatusViewModel.shared
     @ObservedObject var brightnessManager = BrightnessManager.shared
     @ObservedObject var volumeManager = VolumeManager.shared
+    @ObservedObject var pomodoroManager = PomodoroManager.shared
     @State private var hoverTask: Task<Void, Never>?
     @State private var isHovering: Bool = false
     @State private var anyDropDebounceTask: Task<Void, Never>?
@@ -36,6 +37,8 @@ struct ContentView: View {
     @Default(.useMusicVisualizer) var useMusicVisualizer
 
     @Default(.showNotHumanFace) var showNotHumanFace
+    @Default(.enableLyrics) var enableLyrics
+    @Default(.showLyricsOnClosedNotch) var showLyricsOnClosedNotch
 
     // Shared interactive spring for movement/resizing to avoid conflicting animations
     private let animationSpring = Animation.interactiveSpring(response: 0.38, dampingFraction: 0.8, blendDuration: 0)
@@ -285,6 +288,9 @@ struct ContentView: View {
                       } else if coordinator.sneakPeek.show && Defaults[.inlineHUD] && (coordinator.sneakPeek.type != .music) && (coordinator.sneakPeek.type != .battery) && vm.notchState == .closed {
                           InlineHUD(type: $coordinator.sneakPeek.type, value: $coordinator.sneakPeek.value, icon: $coordinator.sneakPeek.icon, hoverAnimation: $isHovering, gestureProgress: $gestureProgress)
                               .transition(.opacity)
+                      } else if vm.notchState == .closed && !vm.hideOnClosed && !coordinator.expandingView.show && pomodoroManager.timerState != .idle && !(musicManager.isPlaying || !musicManager.isPlayerIdle) {
+                          PomodoroClosedNotchView()
+                              .frame(alignment: .center)
                       } else if (!coordinator.expandingView.show || coordinator.expandingView.type == .music) && vm.notchState == .closed && (musicManager.isPlaying || !musicManager.isPlayerIdle) && coordinator.musicLiveActivityEnabled && !vm.hideOnClosed {
                           MusicLiveActivity()
                               .frame(alignment: .center)
@@ -297,6 +303,24 @@ struct ContentView: View {
                        } else {
                            Rectangle().fill(.clear).frame(width: vm.closedNotchSize.width - 20, height: vm.effectiveClosedNotchHeight)
                        }
+
+                      // MARK: - Closed Notch Lyrics (below notch chin)
+                      if enableLyrics && showLyricsOnClosedNotch
+                          && !musicManager.syncedLyrics.isEmpty
+                          && musicManager.isPlaying
+                          && vm.notchState == .closed
+                          && !vm.hideOnClosed
+                          && coordinator.musicLiveActivityEnabled
+                          && (!coordinator.expandingView.show || coordinator.expandingView.type == .music)
+                          && !coordinator.sneakPeek.show
+                      {
+                          ClosedNotchLyricsView(
+                              frameWidth: vm.closedNotchSize.width + 2 * max(0, vm.effectiveClosedNotchHeight - 12)
+                          )
+                          .frame(maxWidth: .infinity, alignment: .center)
+                          .padding(.horizontal, 8)
+                          .padding(.bottom, 8)
+                      }
 
                       if coordinator.sneakPeek.show {
                           if (coordinator.sneakPeek.type != .music) && (coordinator.sneakPeek.type != .battery) && !Defaults[.inlineHUD] && vm.notchState == .closed {
@@ -335,7 +359,7 @@ struct ContentView: View {
                       }
                   }
               }
-              .conditionalModifier((coordinator.sneakPeek.show && (coordinator.sneakPeek.type == .music) && vm.notchState == .closed && !vm.hideOnClosed && Defaults[.sneakPeekStyles] == .standard) || (coordinator.sneakPeek.show && (coordinator.sneakPeek.type != .music) && (vm.notchState == .closed))) { view in
+              .conditionalModifier((coordinator.sneakPeek.show && (coordinator.sneakPeek.type == .music) && vm.notchState == .closed && !vm.hideOnClosed && Defaults[.sneakPeekStyles] == .standard) || (coordinator.sneakPeek.show && (coordinator.sneakPeek.type != .music) && (vm.notchState == .closed)) || (enableLyrics && showLyricsOnClosedNotch && !musicManager.syncedLyrics.isEmpty && musicManager.isPlaying && vm.notchState == .closed && !vm.hideOnClosed && coordinator.musicLiveActivityEnabled && !coordinator.sneakPeek.show) || (vm.notchState == .closed && !vm.hideOnClosed && pomodoroManager.timerState != .idle)) { view in
                   view
                       .fixedSize()
               }
@@ -347,6 +371,8 @@ struct ContentView: View {
                         NotchHomeView(albumArtNamespace: albumArtNamespace)
                     case .shelf:
                         ShelfView()
+                    case .pomodoro:
+                        PomodoroView()
                     }
                 }
                 .transition(
@@ -384,6 +410,42 @@ struct ContentView: View {
     }
 
     @ViewBuilder
+    func PomodoroClosedNotchView() -> some View {
+        let phaseColor: Color = {
+            switch pomodoroManager.phase {
+            case .work: return .red
+            case .shortBreak: return .green
+            case .longBreak: return .blue
+            }
+        }()
+        let mins = Int(pomodoroManager.remainingSeconds) / 60
+        let secs = Int(pomodoroManager.remainingSeconds) % 60
+        let timeText = String(format: "%02d:%02d", mins, secs)
+
+        HStack(spacing: 0) {
+            HStack(spacing: 4) {
+                Circle()
+                    .fill(phaseColor)
+                    .frame(width: 6, height: 6)
+                Text(timeText)
+                    .font(.system(size: 11, weight: .medium, design: .monospaced))
+                    .foregroundStyle(phaseColor)
+            }
+
+            Rectangle()
+                .fill(.black)
+                .frame(width: vm.closedNotchSize.width + 10)
+
+            HStack(spacing: 4) {
+                Image(systemName: pomodoroManager.isRunning ? "timer" : "pause.fill")
+                    .font(.system(size: 10))
+                    .foregroundStyle(phaseColor.opacity(0.7))
+            }
+            .frame(width: 40, alignment: .trailing)
+        }
+        .frame(height: vm.effectiveClosedNotchHeight, alignment: .center)
+    }
+
     func MusicLiveActivity() -> some View {
         HStack {
             Image(nsImage: musicManager.albumArt)
@@ -646,6 +708,66 @@ struct GeneralDropTargetDelegate: DropDelegate {
 
     func performDrop(info: DropInfo) -> Bool {
         return false
+    }
+}
+
+// MARK: - Closed Notch Lyrics View
+
+struct ClosedNotchLyricsView: View {
+    @ObservedObject var musicManager = MusicManager.shared
+    let frameWidth: CGFloat
+
+    private var lyricsColor: Color {
+        Defaults[.coloredSpectrogram]
+            ? Color(nsColor: musicManager.avgColor)
+                .ensureMinimumBrightness(factor: 0.7)
+            : .white.opacity(0.8)
+    }
+
+    var body: some View {
+        TimelineView(.animation(minimumInterval: 0.25)) { timeline in
+            let currentElapsed: Double = {
+                guard musicManager.isPlaying else { return musicManager.elapsedTime }
+                let delta = timeline.date.timeIntervalSince(musicManager.timestampDate)
+                let progressed = musicManager.elapsedTime + (delta * musicManager.playbackRate)
+                return min(max(progressed, 0), musicManager.songDuration)
+            }()
+
+            let line = musicManager.syncedLyrics.isEmpty
+                ? ""
+                : musicManager.lyricLine(at: currentElapsed)
+
+            let textWidth = Self.measureTextWidth(line, font: .preferredFont(forTextStyle: .caption1))
+            let needsScroll = textWidth > frameWidth
+
+            ZStack {
+                if !line.isEmpty {
+                    if needsScroll {
+                        MarqueeText(
+                            .constant(line),
+                            font: .caption,
+                            nsFont: .caption1,
+                            textColor: lyricsColor,
+                            minDuration: 0.5,
+                            frameWidth: frameWidth
+                        )
+                    } else {
+                        Text(line)
+                            .font(.caption)
+                            .foregroundStyle(lyricsColor)
+                            .lineLimit(1)
+                    }
+                }
+            }
+            .id(line)
+            .transition(.blurReplace)
+            .animation(.easeInOut(duration: 0.3), value: line)
+        }
+    }
+
+    private static func measureTextWidth(_ text: String, font: NSFont) -> CGFloat {
+        let attributes: [NSAttributedString.Key: Any] = [.font: font]
+        return (text as NSString).size(withAttributes: attributes).width
     }
 }
 

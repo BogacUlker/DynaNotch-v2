@@ -51,6 +51,9 @@ struct SettingsView: View {
                 NavigationLink(value: "Shelf") {
                     Label("Shelf", systemImage: "books.vertical")
                 }
+                NavigationLink(value: "Pomodoro") {
+                    Label("Pomodoro", systemImage: "timer")
+                }
                 NavigationLink(value: "Shortcuts") {
                     Label("Shortcuts", systemImage: "keyboard")
                 }
@@ -85,6 +88,8 @@ struct SettingsView: View {
                     Charge()
                 case "Shelf":
                     Shelf()
+                case "Pomodoro":
+                    PomodoroSettings()
                 case "Shortcuts":
                     Shortcuts()
                 case "Extensions":
@@ -682,6 +687,12 @@ struct Media: View {
                 Defaults.Toggle(key: .enableLyrics) {
                     HStack {
                         Text("Show lyrics below artist name")
+                        customBadge(text: "Beta")
+                    }
+                }
+                Defaults.Toggle(key: .showLyricsOnClosedNotch) {
+                    HStack {
+                        Text("Show synced lyrics on closed notch")
                         customBadge(text: "Beta")
                     }
                 }
@@ -1791,6 +1802,67 @@ func warningBadge(_ text: String, _ description: String) -> some View {
             }
             Spacer()
         }
+    }
+}
+
+// MARK: - Pomodoro Settings
+
+struct PomodoroSettings: View {
+    @Default(.pomodoroWorkDuration) var workDuration
+    @Default(.pomodoroShortBreakDuration) var shortBreakDuration
+    @Default(.pomodoroLongBreakDuration) var longBreakDuration
+    @Default(.pomodoroCyclesBeforeLongBreak) var cyclesBeforeLongBreak
+    @Default(.pomodoroNotifications) var notifications
+
+    var body: some View {
+        Form {
+            Section {
+                HStack {
+                    Text("Work duration")
+                    Spacer()
+                    Text("\(Int(workDuration / 60)) min")
+                        .foregroundStyle(.secondary)
+                    Stepper("", value: $workDuration, in: (5 * 60)...(60 * 60), step: 5 * 60)
+                        .labelsHidden()
+                }
+                HStack {
+                    Text("Short break")
+                    Spacer()
+                    Text("\(Int(shortBreakDuration / 60)) min")
+                        .foregroundStyle(.secondary)
+                    Stepper("", value: $shortBreakDuration, in: (1 * 60)...(30 * 60), step: 60)
+                        .labelsHidden()
+                }
+                HStack {
+                    Text("Long break")
+                    Spacer()
+                    Text("\(Int(longBreakDuration / 60)) min")
+                        .foregroundStyle(.secondary)
+                    Stepper("", value: $longBreakDuration, in: (5 * 60)...(60 * 60), step: 5 * 60)
+                        .labelsHidden()
+                }
+                HStack {
+                    Text("Cycles before long break")
+                    Spacer()
+                    Text("\(Int(cyclesBeforeLongBreak))")
+                        .foregroundStyle(.secondary)
+                    Stepper("", value: $cyclesBeforeLongBreak, in: 2...8, step: 1)
+                        .labelsHidden()
+                }
+            } header: {
+                Text("Timer")
+            }
+
+            Section {
+                Defaults.Toggle(key: .pomodoroNotifications) {
+                    Text("Send notifications on phase completion")
+                }
+            } header: {
+                Text("Notifications")
+            }
+        }
+        .accentColor(.effectiveAccent)
+        .navigationTitle("Pomodoro")
     }
 }
 
