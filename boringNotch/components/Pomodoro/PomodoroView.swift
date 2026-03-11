@@ -57,15 +57,15 @@ struct PomodoroView: View {
 
             VStack(spacing: 2) {
                 Text(timeString(from: manager.remainingSeconds))
-                    .font(.system(size: 18, weight: .semibold, design: .monospaced))
+                    .font(.system(size: 22, weight: .semibold, design: .monospaced))
                     .foregroundColor(.white)
 
                 Text(manager.phase.rawValue)
-                    .font(.system(size: 8, weight: .medium))
+                    .font(.system(size: 10, weight: .medium))
                     .foregroundColor(phaseColor)
             }
         }
-        .frame(width: 80, height: 80)
+        .frame(width: 90, height: 90)
     }
 
     private var controlButtons: some View {
@@ -75,7 +75,7 @@ struct PomodoroView: View {
                 ForEach(0..<cyclesBeforeLong, id: \.self) { i in
                     Circle()
                         .fill(i < manager.completedCycles ? phaseColor : Color.gray.opacity(0.3))
-                        .frame(width: 6, height: 6)
+                        .frame(width: 7, height: 7)
                 }
             }
 
@@ -88,9 +88,9 @@ struct PomodoroView: View {
                     }
                 } label: {
                     Image(systemName: manager.isRunning ? "pause.fill" : "play.fill")
-                        .font(.system(size: 12))
+                        .font(.system(size: 13))
                         .foregroundColor(.white)
-                        .frame(width: 26, height: 26)
+                        .frame(width: 28, height: 28)
                         .background(phaseColor.opacity(0.3))
                         .clipShape(Circle())
                 }
@@ -100,9 +100,9 @@ struct PomodoroView: View {
                     manager.skip()
                 } label: {
                     Image(systemName: "forward.fill")
-                        .font(.system(size: 10))
+                        .font(.system(size: 11))
                         .foregroundColor(.gray)
-                        .frame(width: 22, height: 22)
+                        .frame(width: 24, height: 24)
                         .background(Color.gray.opacity(0.15))
                         .clipShape(Circle())
                 }
@@ -112,9 +112,9 @@ struct PomodoroView: View {
                     manager.reset()
                 } label: {
                     Image(systemName: "arrow.counterclockwise")
-                        .font(.system(size: 10))
+                        .font(.system(size: 11))
                         .foregroundColor(.gray)
-                        .frame(width: 22, height: 22)
+                        .frame(width: 24, height: 24)
                         .background(Color.gray.opacity(0.15))
                         .clipShape(Circle())
                 }
@@ -148,14 +148,14 @@ struct PomodoroView: View {
     private func statBadge(icon: String, value: String, label: String) -> some View {
         HStack(spacing: 4) {
             Image(systemName: icon)
-                .font(.system(size: 9))
+                .font(.system(size: 11))
                 .foregroundColor(phaseColor)
             VStack(alignment: .leading, spacing: 0) {
                 Text(value)
-                    .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                    .font(.system(size: 14, weight: .semibold, design: .monospaced))
                     .foregroundColor(.white)
                 Text(label)
-                    .font(.system(size: 7))
+                    .font(.system(size: 9))
                     .foregroundColor(.gray)
             }
         }
@@ -178,14 +178,14 @@ struct PomodoroView: View {
                 VStack(spacing: 2) {
                     RoundedRectangle(cornerRadius: 2)
                         .fill(day == todayKey ? phaseColor : phaseColor.opacity(0.4))
-                        .frame(width: 12, height: max(3, CGFloat(cycles) / CGFloat(maxCycles) * 30))
+                        .frame(width: 14, height: max(4, CGFloat(cycles) / CGFloat(maxCycles) * 34))
                     Text(shortDayLabel(day))
-                        .font(.system(size: 6))
+                        .font(.system(size: 8))
                         .foregroundColor(.gray)
                 }
             }
         }
-        .frame(height: 46)
+        .frame(height: 52)
     }
 
     private var todayKey: String {
