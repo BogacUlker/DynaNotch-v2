@@ -26,6 +26,7 @@ struct ContentView: View {
     @ObservedObject var pomodoroManager = PomodoroManager.shared
     @ObservedObject var weatherManager = WeatherManager.shared
     @ObservedObject var sportsManager = SportsManager.shared
+    @ObservedObject var systemMonitorManager = SystemMonitorManager.shared
     @State private var hoverTask: Task<Void, Never>?
     @State private var isHovering: Bool = false
     @State private var anyDropDebounceTask: Task<Void, Never>?
@@ -299,6 +300,9 @@ struct ContentView: View {
                       } else if vm.notchState == .closed && !vm.hideOnClosed && !coordinator.expandingView.show && sportsManager.hasLiveEvent && !(musicManager.isPlaying || !musicManager.isPlayerIdle) && pomodoroManager.timerState == .idle {
                           SportsClosedNotchView()
                               .frame(alignment: .center)
+                      } else if vm.notchState == .closed && !vm.hideOnClosed && !coordinator.expandingView.show && Defaults[.enableSystemMonitor] && !(musicManager.isPlaying || !musicManager.isPlayerIdle) && pomodoroManager.timerState == .idle && !sportsManager.hasLiveEvent {
+                          SystemMonitorClosedNotchView()
+                              .frame(alignment: .center)
                       } else if (!coordinator.expandingView.show || coordinator.expandingView.type == .music) && vm.notchState == .closed && (musicManager.isPlaying || !musicManager.isPlayerIdle) && coordinator.musicLiveActivityEnabled && !vm.hideOnClosed {
                           MusicLiveActivity()
                               .frame(alignment: .center)
@@ -367,7 +371,7 @@ struct ContentView: View {
                       }
                   }
               }
-              .conditionalModifier((coordinator.sneakPeek.show && (coordinator.sneakPeek.type == .music) && vm.notchState == .closed && !vm.hideOnClosed && Defaults[.sneakPeekStyles] == .standard) || (coordinator.sneakPeek.show && (coordinator.sneakPeek.type != .music) && (vm.notchState == .closed)) || (enableLyrics && showLyricsOnClosedNotch && !musicManager.syncedLyrics.isEmpty && musicManager.isPlaying && vm.notchState == .closed && !vm.hideOnClosed && coordinator.musicLiveActivityEnabled && !coordinator.sneakPeek.show) || (vm.notchState == .closed && !vm.hideOnClosed && pomodoroManager.timerState != .idle) || (vm.notchState == .closed && !vm.hideOnClosed && Defaults[.enableWeather] && weatherManager.temperature != nil) || (vm.notchState == .closed && !vm.hideOnClosed && sportsManager.hasLiveEvent)) { view in
+              .conditionalModifier((coordinator.sneakPeek.show && (coordinator.sneakPeek.type == .music) && vm.notchState == .closed && !vm.hideOnClosed && Defaults[.sneakPeekStyles] == .standard) || (coordinator.sneakPeek.show && (coordinator.sneakPeek.type != .music) && (vm.notchState == .closed)) || (enableLyrics && showLyricsOnClosedNotch && !musicManager.syncedLyrics.isEmpty && musicManager.isPlaying && vm.notchState == .closed && !vm.hideOnClosed && coordinator.musicLiveActivityEnabled && !coordinator.sneakPeek.show) || (vm.notchState == .closed && !vm.hideOnClosed && pomodoroManager.timerState != .idle) || (vm.notchState == .closed && !vm.hideOnClosed && Defaults[.enableWeather] && weatherManager.temperature != nil) || (vm.notchState == .closed && !vm.hideOnClosed && sportsManager.hasLiveEvent) || (vm.notchState == .closed && !vm.hideOnClosed && Defaults[.enableSystemMonitor])) { view in
                   view
                       .fixedSize()
               }
@@ -385,6 +389,8 @@ struct ContentView: View {
                         WeatherView()
                     case .sports:
                         SportsView()
+                    case .systemMonitor:
+                        SystemMonitorView()
                     }
                 }
                 .transition(
@@ -514,6 +520,58 @@ struct ContentView: View {
             }
             .frame(height: vm.effectiveClosedNotchHeight, alignment: .center)
         }
+    }
+
+    @ViewBuilder
+    func SystemMonitorClosedNotchView() -> some View {
+        let cpuPct = systemMonitorManager.cpuUsage
+        let ramPct = systemMonitorManager.ramUsagePercent
+        let cpuColor: Color = cpuPct < 50 ? .green : cpuPct < 80 ? .orange : .red
+        let ramColor: Color = ramPct < 60 ? .cyan : ramPct < 85 ? .orange : .red
+        let ringSize = max(0, vm.effectiveClosedNotchHeight - 14)
+
+        HStack(spacing: 0) {
+            HStack(spacing: 4) {
+                // CPU mini ring
+                ZStack {
+                    Circle()
+                        .stroke(cpuColor.opacity(0.2), lineWidth: 1.5)
+                    Circle()
+                        .trim(from: 0, to: min(cpuPct / 100.0, 1.0))
+                        .stroke(cpuColor, style: StrokeStyle(lineWidth: 1.5, lineCap: .round))
+                        .rotationEffect(.degrees(-90))
+                        .animation(.easeInOut(duration: 0.6), value: cpuPct)
+                }
+                .frame(width: ringSize, height: ringSize)
+
+                Text("\(Int(cpuPct))%")
+                    .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                    .foregroundColor(cpuColor)
+            }
+
+            Rectangle()
+                .fill(.black)
+                .frame(width: vm.closedNotchSize.width + 10)
+
+            HStack(spacing: 4) {
+                // RAM mini ring
+                ZStack {
+                    Circle()
+                        .stroke(ramColor.opacity(0.2), lineWidth: 1.5)
+                    Circle()
+                        .trim(from: 0, to: min(ramPct / 100.0, 1.0))
+                        .stroke(ramColor, style: StrokeStyle(lineWidth: 1.5, lineCap: .round))
+                        .rotationEffect(.degrees(-90))
+                }
+                .frame(width: ringSize, height: ringSize)
+
+                Text("\(Int(ramPct))%")
+                    .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                    .foregroundColor(ramColor)
+            }
+            .frame(width: 40, alignment: .trailing)
+        }
+        .frame(height: vm.effectiveClosedNotchHeight, alignment: .center)
     }
 
     func MusicLiveActivity() -> some View {

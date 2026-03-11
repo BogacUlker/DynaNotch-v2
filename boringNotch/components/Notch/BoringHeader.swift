@@ -16,9 +16,10 @@ struct BoringHeader: View {
     @Default(.pomodoroEnabled) private var pomodoroEnabled
     @Default(.enableWeather) private var weatherEnabled
     @Default(.enableSports) private var sportsEnabled
+    @Default(.enableSystemMonitor) private var systemMonitorEnabled
 
     private var showTabs: Bool {
-        ((!tvm.isEmpty || coordinator.alwaysShowTabs) && Defaults[.boringShelf]) || coordinator.currentView == .pomodoro || coordinator.currentView == .weather || coordinator.currentView == .sports
+        ((!tvm.isEmpty || coordinator.alwaysShowTabs) && Defaults[.boringShelf]) || coordinator.currentView == .pomodoro || coordinator.currentView == .weather || coordinator.currentView == .sports || coordinator.currentView == .systemMonitor
     }
 
     private var leftTabs: [TabModel] {
@@ -36,6 +37,9 @@ struct BoringHeader: View {
         }
         if sportsEnabled {
             tabs.append(TabModel(label: "Sports", icon: "sportscourt.fill", view: .sports))
+        }
+        if systemMonitorEnabled {
+            tabs.append(TabModel(label: "Monitor", icon: "gauge.with.dots.needle.33percent", view: .systemMonitor))
         }
         return tabs
     }

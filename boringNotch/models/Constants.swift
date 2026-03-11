@@ -241,4 +241,10 @@ extension Defaults.Keys {
     static let sportsSlot1 = Key<SportsWidgetKind>("sportsSlot1", default: .footballLive)
     static let sportsSlot2 = Key<SportsWidgetKind>("sportsSlot2", default: .footballStandings)
     static let sportsSlot3 = Key<SportsWidgetKind>("sportsSlot3", default: .f1Calendar)
+
+    // MARK: System Monitor
+    static let enableSystemMonitor = Key<Bool>("enableSystemMonitor", default: false)
+    static let sysMonSlot1 = Key<SystemMonitorWidgetKind>("sysMonSlot1", default: .cpuOverview)
+    static let sysMonSlot2 = Key<SystemMonitorWidgetKind>("sysMonSlot2", default: .memoryBreakdown)
+    static let sysMonSlot3 = Key<SystemMonitorWidgetKind>("sysMonSlot3", default: .networkLive)
 }

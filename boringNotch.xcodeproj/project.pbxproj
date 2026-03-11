@@ -157,6 +157,9 @@
 		B1B00028EF0000300000028 /* EuroLeagueProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00018EF0000300000018 /* EuroLeagueProvider.swift */; };
 		B1B00029EF0000300000029 /* F1Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00019EF0000300000019 /* F1Provider.swift */; };
 		B1B0002AEF000030000002A /* SportsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B0001AEF000030000001A /* SportsManager.swift */; };
+		B1C00041EF0000400000041 /* SystemMonitorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C00031EF0000400000031 /* SystemMonitorManager.swift */; };
+		B1C00042EF0000400000042 /* SystemMonitorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C00032EF0000400000032 /* SystemMonitorView.swift */; };
+		B1C00043EF0000400000043 /* SystemMonitorSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C00033EF0000400000033 /* SystemMonitorSettings.swift */; };
 		B1B0002BEF000030000002B /* SportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B0001BEF000030000001B /* SportsView.swift */; };
 		B1B0002CEF000030000002C /* SportsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B0001CEF000030000001C /* SportsSettings.swift */; };
 /* End PBXBuildFile section */
@@ -339,6 +342,9 @@
 		B1B00018EF0000300000018 /* EuroLeagueProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EuroLeagueProvider.swift; sourceTree = "<group>"; };
 		B1B00019EF0000300000019 /* F1Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = F1Provider.swift; sourceTree = "<group>"; };
 		B1B0001AEF000030000001A /* SportsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportsManager.swift; sourceTree = "<group>"; };
+		B1C00031EF0000400000031 /* SystemMonitorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMonitorManager.swift; sourceTree = "<group>"; };
+		B1C00032EF0000400000032 /* SystemMonitorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMonitorView.swift; sourceTree = "<group>"; };
+		B1C00033EF0000400000033 /* SystemMonitorSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMonitorSettings.swift; sourceTree = "<group>"; };
 		B1B0001BEF000030000001B /* SportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportsView.swift; sourceTree = "<group>"; };
 		B1B0001CEF000030000001C /* SportsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportsSettings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -527,6 +533,16 @@
 			path = Sports;
 			sourceTree = "<group>";
 		};
+		B1C00040EF0000400000040 /* SystemMonitor */ = {
+			isa = PBXGroup;
+			children = (
+				B1C00031EF0000400000031 /* SystemMonitorManager.swift */,
+				B1C00032EF0000400000032 /* SystemMonitorView.swift */,
+				B1C00033EF0000400000033 /* SystemMonitorSettings.swift */,
+			);
+			path = SystemMonitor;
+			sourceTree = "<group>";
+		};
 		B1B00031EF0000300000031 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -574,6 +590,7 @@
 				B1A0000A2EF0000200000010 /* Weather */,
 				B1A000052EF0000100000005 /* Pomodoro */,
 				B1B00030EF0000300000030 /* Sports */,
+				B1C00040EF0000400000040 /* SystemMonitor */,
 				B141C23B2CA5F50900AC8CC8 /* Onboarding */,
 				B1C448992C97375A001F0858 /* Tips */,
 				14C08BB72C8DE49E000F8AA0 /* Calendar */,
@@ -1064,6 +1081,9 @@
 				B1B0002AEF000030000002A /* SportsManager.swift in Sources */,
 				B1B0002BEF000030000002B /* SportsView.swift in Sources */,
 				B1B0002CEF000030000002C /* SportsSettings.swift in Sources */,
+				B1C00041EF0000400000041 /* SystemMonitorManager.swift in Sources */,
+				B1C00042EF0000400000042 /* SystemMonitorView.swift in Sources */,
+				B1C00043EF0000400000043 /* SystemMonitorSettings.swift in Sources */,
 				9AB0C6BD2C73C9CB00F7CD30 /* NotchHomeView.swift in Sources */,
 				B172AAC02C95DA0B001623F1 /* InlineHUD.swift in Sources */,
 				14E9FEAA2C70BF610062E83F /* DownloadView.swift in Sources */,

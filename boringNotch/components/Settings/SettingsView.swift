@@ -60,6 +60,9 @@ struct SettingsView: View {
                 NavigationLink(value: "Sports") {
                     Label("Sports", systemImage: "sportscourt.fill")
                 }
+                NavigationLink(value: "System Monitor") {
+                    Label("System Monitor", systemImage: "gauge.with.dots.needle.33percent")
+                }
                 NavigationLink(value: "Shortcuts") {
                     Label("Shortcuts", systemImage: "keyboard")
                 }
@@ -100,6 +103,8 @@ struct SettingsView: View {
                     WeatherSettings()
                 case "Sports":
                     SportsSettings()
+                case "System Monitor":
+                    SystemMonitorSettings()
                 case "Shortcuts":
                     Shortcuts()
                 case "Extensions":
