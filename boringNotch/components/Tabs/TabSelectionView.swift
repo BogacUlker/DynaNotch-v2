@@ -14,27 +14,16 @@ struct TabModel: Identifiable {
     let view: NotchViews
 }
 
-/// Core tabs on the left side of the notch
-let leftTabs = [
+/// Core tabs always visible on the left side
+let coreTabs = [
     TabModel(label: "Home", icon: "house.fill", view: .home),
     TabModel(label: "Shelf", icon: "tray.fill", view: .shelf),
-    TabModel(label: "Weather", icon: "cloud.sun.fill", view: .weather),
-]
-
-/// Feature tabs on the right side of the notch
-let rightTabs = [
-    TabModel(label: "Pomodoro", icon: "timer", view: .pomodoro),
-    TabModel(label: "Sports", icon: "sportscourt.fill", view: .sports),
 ]
 
 struct TabSelectionView: View {
     let items: [TabModel]
     @ObservedObject var coordinator = BoringViewCoordinator.shared
     @Namespace var animation
-
-    init(items: [TabModel]? = nil) {
-        self.items = items ?? leftTabs
-    }
 
     var body: some View {
         HStack(spacing: 0) {

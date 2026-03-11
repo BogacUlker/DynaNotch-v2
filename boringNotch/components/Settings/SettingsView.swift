@@ -1818,6 +1818,7 @@ func warningBadge(_ text: String, _ description: String) -> some View {
 // MARK: - Pomodoro Settings
 
 struct PomodoroSettings: View {
+    @Default(.pomodoroEnabled) var pomodoroEnabled
     @Default(.pomodoroWorkDuration) var workDuration
     @Default(.pomodoroShortBreakDuration) var shortBreakDuration
     @Default(.pomodoroLongBreakDuration) var longBreakDuration
@@ -1826,6 +1827,12 @@ struct PomodoroSettings: View {
 
     var body: some View {
         Form {
+            Section {
+                Defaults.Toggle(key: .pomodoroEnabled) {
+                    Text("Enable Pomodoro")
+                }
+            }
+
             Section {
                 HStack {
                     Text("Work duration")

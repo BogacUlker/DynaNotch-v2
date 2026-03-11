@@ -13,9 +13,31 @@ struct BoringHeader: View {
     @ObservedObject var batteryModel = BatteryStatusViewModel.shared
     @ObservedObject var coordinator = BoringViewCoordinator.shared
     @StateObject var tvm = ShelfStateViewModel.shared
+    @Default(.pomodoroEnabled) private var pomodoroEnabled
+    @Default(.enableWeather) private var weatherEnabled
+    @Default(.enableSports) private var sportsEnabled
 
     private var showTabs: Bool {
         ((!tvm.isEmpty || coordinator.alwaysShowTabs) && Defaults[.boringShelf]) || coordinator.currentView == .pomodoro || coordinator.currentView == .weather || coordinator.currentView == .sports
+    }
+
+    private var leftTabs: [TabModel] {
+        var tabs = coreTabs
+        if weatherEnabled {
+            tabs.append(TabModel(label: "Weather", icon: "cloud.sun.fill", view: .weather))
+        }
+        return tabs
+    }
+
+    private var rightTabs: [TabModel] {
+        var tabs: [TabModel] = []
+        if pomodoroEnabled {
+            tabs.append(TabModel(label: "Pomodoro", icon: "timer", view: .pomodoro))
+        }
+        if sportsEnabled {
+            tabs.append(TabModel(label: "Sports", icon: "sportscourt.fill", view: .sports))
+        }
+        return tabs
     }
 
     var body: some View {
@@ -47,7 +69,7 @@ struct BoringHeader: View {
                         OpenNotchHUD(type: $coordinator.sneakPeek.type, value: $coordinator.sneakPeek.value, icon: $coordinator.sneakPeek.icon)
                             .transition(.scale(scale: 0.8).combined(with: .opacity))
                     } else {
-                        if showTabs {
+                        if showTabs && !rightTabs.isEmpty {
                             TabSelectionView(items: rightTabs)
                         }
                         if Defaults[.showMirror] {
