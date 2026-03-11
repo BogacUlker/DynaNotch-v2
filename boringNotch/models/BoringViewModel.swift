@@ -9,6 +9,7 @@ import Combine
 import Defaults
 import SwiftUI
 
+@MainActor
 class BoringViewModel: NSObject, ObservableObject {
     @ObservedObject var coordinator = BoringViewCoordinator.shared
     @ObservedObject var detector = FullscreenMediaDetector.shared
@@ -42,7 +43,8 @@ class BoringViewModel: NSObject, ObservableObject {
     @Published var isRequestingAuthorization: Bool = false
     
     deinit {
-        destroy()
+        cancellables.forEach { $0.cancel() }
+        cancellables.removeAll()
     }
 
     func destroy() {

@@ -33,6 +33,7 @@ enum SystemMonitorWidgetKind: String, CaseIterable, Defaults.Serializable {
 }
 
 /// Centralized system monitor data manager.
+@MainActor
 class SystemMonitorManager: ObservableObject {
 
     static let shared = SystemMonitorManager()

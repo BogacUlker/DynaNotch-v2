@@ -20,6 +20,9 @@ class BatteryActivityManager {
     private var notificationQueue: [BatteryEvent] = []
     private var isProcessingNotifications = false
 
+    /// Serial queue protecting mutable state accessed from IOKit callbacks.
+    private let stateQueue = DispatchQueue(label: "com.dynanotch.BatteryActivityManager.state")
+
     enum BatteryEvent {
         case powerSourceChanged(isPluggedIn: Bool)
         case batteryLevelChanged(level: Float)
@@ -100,68 +103,65 @@ class BatteryActivityManager {
     /// Notifies the observers of battery changes
     /// Checks for changes in battery status and notifies observers
     private func notifyBatteryChanges() {
-        let batteryInfo = getBatteryInfo()
-        
-        // Check for changes
-        if let previousInfo = previousBatteryInfo {
-            // Usar la función auxiliar para cada propiedad
-            checkAndNotify(
-                previous: previousInfo.isPluggedIn,
-                current: batteryInfo.isPluggedIn,
-                eventGenerator: { .powerSourceChanged(isPluggedIn: $0) }
-            )
-            
-            checkAndNotify(
-                previous: previousInfo.currentCapacity,
-                current: batteryInfo.currentCapacity,
-                eventGenerator: { .batteryLevelChanged(level: $0) }
-            )
-            
-            checkAndNotify(
-                previous: previousInfo.isCharging,
-                current: batteryInfo.isCharging,
-                eventGenerator: { .isChargingChanged(isCharging: $0) }
-            )
-            
-            checkAndNotify(
-                previous: previousInfo.isInLowPowerMode,
-                current: batteryInfo.isInLowPowerMode,
-                eventGenerator: { .lowPowerModeChanged(isEnabled: $0) }
-            )
-            
-            checkAndNotify(
-                previous: previousInfo.timeToFullCharge,
-                current: batteryInfo.timeToFullCharge,
-                eventGenerator: { .timeToFullChargeChanged(time: $0) }
-            )
-            
-            checkAndNotify(
-                previous: previousInfo.maxCapacity,
-                current: batteryInfo.maxCapacity,
-                eventGenerator: { .maxCapacityChanged(capacity: $0) }
-            )
-        } else {
-            // First time notification
-            enqueueNotification(.powerSourceChanged(isPluggedIn: batteryInfo.isPluggedIn))
-            enqueueNotification(.batteryLevelChanged(level: batteryInfo.currentCapacity))
-            enqueueNotification(.isChargingChanged(isCharging: batteryInfo.isCharging))
-            enqueueNotification(.lowPowerModeChanged(isEnabled: batteryInfo.isInLowPowerMode))
-            enqueueNotification(.timeToFullChargeChanged(time: batteryInfo.timeToFullCharge))
-            enqueueNotification(.maxCapacityChanged(capacity: batteryInfo.maxCapacity))
-        }
-
-        // Update previous battery info
-        previousBatteryInfo = batteryInfo
-
-        // Trigger optional callbacks
-        DispatchQueue.main.async { [weak self] in
+        stateQueue.async { [weak self] in
             guard let self = self else { return }
-            self.onBatteryLevelChange?(batteryInfo.currentCapacity)
-            self.onPowerSourceChange?(batteryInfo.isPluggedIn)
-            self.onChargingChange?(batteryInfo.isCharging)
-            self.onPowerModeChange?(batteryInfo.isInLowPowerMode)
-            self.onTimeToFullChargeChange?(batteryInfo.timeToFullCharge)
-            self.onMaxCapacityChange?(batteryInfo.maxCapacity)
+            let batteryInfo = self.getBatteryInfo()
+
+            // Check for changes
+            if let previousInfo = self.previousBatteryInfo {
+                self.checkAndNotify(
+                    previous: previousInfo.isPluggedIn,
+                    current: batteryInfo.isPluggedIn,
+                    eventGenerator: { .powerSourceChanged(isPluggedIn: $0) }
+                )
+                self.checkAndNotify(
+                    previous: previousInfo.currentCapacity,
+                    current: batteryInfo.currentCapacity,
+                    eventGenerator: { .batteryLevelChanged(level: $0) }
+                )
+                self.checkAndNotify(
+                    previous: previousInfo.isCharging,
+                    current: batteryInfo.isCharging,
+                    eventGenerator: { .isChargingChanged(isCharging: $0) }
+                )
+                self.checkAndNotify(
+                    previous: previousInfo.isInLowPowerMode,
+                    current: batteryInfo.isInLowPowerMode,
+                    eventGenerator: { .lowPowerModeChanged(isEnabled: $0) }
+                )
+                self.checkAndNotify(
+                    previous: previousInfo.timeToFullCharge,
+                    current: batteryInfo.timeToFullCharge,
+                    eventGenerator: { .timeToFullChargeChanged(time: $0) }
+                )
+                self.checkAndNotify(
+                    previous: previousInfo.maxCapacity,
+                    current: batteryInfo.maxCapacity,
+                    eventGenerator: { .maxCapacityChanged(capacity: $0) }
+                )
+            } else {
+                // First time notification
+                self.enqueueNotification(.powerSourceChanged(isPluggedIn: batteryInfo.isPluggedIn))
+                self.enqueueNotification(.batteryLevelChanged(level: batteryInfo.currentCapacity))
+                self.enqueueNotification(.isChargingChanged(isCharging: batteryInfo.isCharging))
+                self.enqueueNotification(.lowPowerModeChanged(isEnabled: batteryInfo.isInLowPowerMode))
+                self.enqueueNotification(.timeToFullChargeChanged(time: batteryInfo.timeToFullCharge))
+                self.enqueueNotification(.maxCapacityChanged(capacity: batteryInfo.maxCapacity))
+            }
+
+            // Update previous battery info
+            self.previousBatteryInfo = batteryInfo
+
+            // Trigger optional callbacks on main thread
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.onBatteryLevelChange?(batteryInfo.currentCapacity)
+                self.onPowerSourceChange?(batteryInfo.isPluggedIn)
+                self.onChargingChange?(batteryInfo.isCharging)
+                self.onPowerModeChange?(batteryInfo.isInLowPowerMode)
+                self.onTimeToFullChargeChange?(batteryInfo.timeToFullCharge)
+                self.onMaxCapacityChange?(batteryInfo.maxCapacity)
+            }
         }
     }
 

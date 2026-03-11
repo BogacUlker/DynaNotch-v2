@@ -14,6 +14,7 @@ let defaultImage: NSImage = .init(
     accessibilityDescription: "Album Art"
 )!
 
+@MainActor
 class MusicManager: ObservableObject {
     // MARK: - Properties
     static let shared = MusicManager()
@@ -93,17 +94,20 @@ class MusicManager: ObservableObject {
     }
 
     deinit {
-        destroy()
+        debounceIdleTask?.cancel()
+        cancellables.removeAll()
+        controllerCancellables.removeAll()
+        flipWorkItem?.cancel()
+        transitionWorkItem?.cancel()
+        activeController = nil
     }
-    
+
     public func destroy() {
         debounceIdleTask?.cancel()
         cancellables.removeAll()
         controllerCancellables.removeAll()
         flipWorkItem?.cancel()
         transitionWorkItem?.cancel()
-
-        // Release active controller
         activeController = nil
     }
 
@@ -513,7 +517,7 @@ class MusicManager: ObservableObject {
         // Create a new animation
         let workItem = DispatchWorkItem { [weak self] in
             self?.isFlipping = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
                 self?.isFlipping = false
             }
         }

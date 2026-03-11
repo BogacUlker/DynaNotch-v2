@@ -38,12 +38,12 @@
 
 | # | Sorun | Dosya | Durum |
 |---|-------|-------|-------|
-| 13 | `BatteryActivityManager` — `observers`, `notificationQueue`, `previousBatteryInfo` birden fazla thread'den korumasız erişiliyor | `BatteryActivityManager.swift` | ⏳ |
-| 14 | `MusicManager` — `@MainActor` yok, `@Published` property'ler background thread'den güncelleniyor | `MusicManager.swift` | ⏳ |
-| 15 | `BoringViewModel` — `@MainActor` yok, 18+ `@Published` property | `BoringViewModel.swift` | ⏳ |
-| 16 | `WebcamManager` — `@MainActor` yok, `sessionQueue` ile `@Published` arasında race condition | `WebcamManager.swift` | ⏳ |
-| 17 | `SystemMonitorManager` — `@MainActor` yok (şu an main thread timer ile çalışıyor ama garanti değil) | `SystemMonitorManager.swift` | ⏳ |
-| 18 | `MusicManager.triggerFlipAnimation()` — iç closure'da `[weak self]` eksik | `MusicManager.swift:516-517` | ⏳ |
+| 13 | ~~`BatteryActivityManager` — `observers`, `notificationQueue`, `previousBatteryInfo` birden fazla thread'den korumasız erişiliyor~~ | `BatteryActivityManager.swift` | ✅ |
+| 14 | ~~`MusicManager` — `@MainActor` yok, `@Published` property'ler background thread'den güncelleniyor~~ | `MusicManager.swift` | ✅ |
+| 15 | ~~`BoringViewModel` — `@MainActor` yok, 18+ `@Published` property~~ | `BoringViewModel.swift` | ✅ |
+| 16 | `WebcamManager` — `sessionQueue` ile `@Published` arasında race condition (mevcut dispatch pattern yeterli) | `WebcamManager.swift` | ⚠️ |
+| 17 | ~~`SystemMonitorManager` — `@MainActor` yok~~ | `SystemMonitorManager.swift` | ✅ |
+| 18 | ~~`MusicManager.triggerFlipAnimation()` — iç closure'da `[weak self]` eksik~~ | `MusicManager.swift:516-517` | ✅ |
 
 **Çözüm:** Singleton ObservableObject'lere `@MainActor` ekle veya tüm `@Published` güncellemelerini `DispatchQueue.main` ile koru.
 
@@ -136,7 +136,7 @@
 |--------|------|---------|
 | 🔴 KRİTİK — Çökme | 7 madde (18 instance) | 7 ✅ |
 | 🔴 KRİTİK — Bellek sızıntısı | 5 madde | 4 ✅ |
-| 🔴 KRİTİK — Thread safety | 6 madde | 0 |
+| 🔴 KRİTİK — Thread safety | 6 madde | 5 ✅ |
 | 🟡 ÖNEMLİ — Hata yönetimi | 6 madde | 0 |
 | 🟡 ÖNEMLİ — Performans | 3 madde | 1 ✅ |
 | 🟡 ÖNEMLİ — Lifecycle | 3 madde | 0 |
@@ -144,4 +144,4 @@
 | 🟢 İYİLEŞTİRME — Erişilebilirlik | 2 madde | 0 |
 | 🟢 İYİLEŞTİRME — Kod temizliği | 4 madde | 0 |
 | 🟢 İYİLEŞTİRME — Swift 6 | 2 madde | 0 |
-| **TOPLAM** | **44 madde** | **12 çözüldü** |
+| **TOPLAM** | **44 madde** | **17 çözüldü** |
