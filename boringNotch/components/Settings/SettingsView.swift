@@ -27,53 +27,58 @@ struct SettingsView: View {
     var body: some View {
         NavigationSplitView {
             List(selection: $selectedTab) {
-                NavigationLink(value: "General") {
-                    Label("General", systemImage: "gear")
+                Section("App") {
+                    NavigationLink(value: "General") {
+                        Label("General", systemImage: "gear")
+                    }
+                    NavigationLink(value: "Appearance") {
+                        Label("Appearance", systemImage: "eye")
+                    }
+                    NavigationLink(value: "Advanced") {
+                        Label("Advanced", systemImage: "gearshape.2")
+                    }
                 }
-                NavigationLink(value: "Appearance") {
-                    Label("Appearance", systemImage: "eye")
+
+                Section("Features") {
+                    NavigationLink(value: "Media") {
+                        Label("Media", systemImage: "play.laptopcomputer")
+                    }
+                    NavigationLink(value: "Calendar") {
+                        Label("Calendar", systemImage: "calendar")
+                    }
+                    NavigationLink(value: "Pomodoro") {
+                        Label("Pomodoro", systemImage: "timer")
+                    }
+                    NavigationLink(value: "System Monitor") {
+                        Label("System Monitor", systemImage: "gauge.with.dots.needle.33percent")
+                    }
+                    NavigationLink(value: "Weather") {
+                        Label("Weather", systemImage: "cloud.sun.fill")
+                    }
+                    NavigationLink(value: "Sports") {
+                        Label("Sports", systemImage: "sportscourt.fill")
+                    }
                 }
-                NavigationLink(value: "Media") {
-                    Label("Media", systemImage: "play.laptopcomputer")
+
+                Section("System") {
+                    NavigationLink(value: "HUD") {
+                        Label("HUDs", systemImage: "dial.medium.fill")
+                    }
+                    NavigationLink(value: "Battery") {
+                        Label("Battery", systemImage: "battery.100.bolt")
+                    }
+                    NavigationLink(value: "Shelf") {
+                        Label("Shelf", systemImage: "books.vertical")
+                    }
+                    NavigationLink(value: "Shortcuts") {
+                        Label("Shortcuts", systemImage: "keyboard")
+                    }
                 }
-                NavigationLink(value: "Calendar") {
-                    Label("Calendar", systemImage: "calendar")
-                }
-                NavigationLink(value: "HUD") {
-                    Label("HUDs", systemImage: "dial.medium.fill")
-                }
-                NavigationLink(value: "Battery") {
-                    Label("Battery", systemImage: "battery.100.bolt")
-                }
-//                NavigationLink(value: "Downloads") {
-//                    Label("Downloads", systemImage: "square.and.arrow.down")
-//                }
-                NavigationLink(value: "Shelf") {
-                    Label("Shelf", systemImage: "books.vertical")
-                }
-                NavigationLink(value: "Pomodoro") {
-                    Label("Pomodoro", systemImage: "timer")
-                }
-                NavigationLink(value: "Weather") {
-                    Label("Weather", systemImage: "cloud.sun.fill")
-                }
-                NavigationLink(value: "Sports") {
-                    Label("Sports", systemImage: "sportscourt.fill")
-                }
-                NavigationLink(value: "System Monitor") {
-                    Label("System Monitor", systemImage: "gauge.with.dots.needle.33percent")
-                }
-                NavigationLink(value: "Shortcuts") {
-                    Label("Shortcuts", systemImage: "keyboard")
-                }
-                // NavigationLink(value: "Extensions") {
-                //     Label("Extensions", systemImage: "puzzlepiece.extension")
-                // }
-                NavigationLink(value: "Advanced") {
-                    Label("Advanced", systemImage: "gearshape.2")
-                }
-                NavigationLink(value: "About") {
-                    Label("About", systemImage: "info.circle")
+
+                Section {
+                    NavigationLink(value: "About") {
+                        Label("About", systemImage: "info.circle")
+                    }
                 }
             }
             .listStyle(SidebarListStyle())
@@ -896,7 +901,7 @@ struct About: View {
                 HStack(spacing: 30) {
                     Spacer(minLength: 0)
                     Button {
-                        if let url = URL(string: "https://github.com/TheBoredTeam/boring.notch") {
+                        if let url = URL(string: "https://github.com/BogacUlker/DynaNotch-v2") {
                             NSWorkspace.shared.open(url)
                         }
                     } label: {
@@ -912,10 +917,26 @@ struct About: View {
                     Spacer(minLength: 0)
                 }
                 .buttonStyle(PlainButtonStyle())
+
+                Section {
+                    HStack {
+                        Text("Based on")
+                        Spacer()
+                        Button("Boring.Notch by TheBoredTeam") {
+                            if let url = URL(string: "https://github.com/TheBoredTeam/boring.notch") {
+                                NSWorkspace.shared.open(url)
+                            }
+                        }
+                        .buttonStyle(.link)
+                    }
+                } header: {
+                    Text("Attribution")
+                }
             }
             VStack(spacing: 0) {
                 Divider()
-                Text("Made with 🫶🏻 by not so boring not.people")
+                Text("DynaNotch — Based on Boring.Notch by TheBoredTeam")
+                    .font(.caption)
                     .foregroundStyle(.secondary)
                     .padding(.top, 5)
                     .padding(.bottom, 7)
