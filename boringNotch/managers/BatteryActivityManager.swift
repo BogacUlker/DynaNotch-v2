@@ -84,6 +84,7 @@ class BatteryActivityManager {
     /// Stops monitoring battery changes
     private func stopMonitoring() {
         if let powerSource = batterySource {
+            CFRunLoopSourceInvalidate(powerSource)
             CFRunLoopRemoveSource(CFRunLoopGetCurrent(), powerSource, .defaultMode)
             batterySource = nil
         }

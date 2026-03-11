@@ -28,7 +28,7 @@
 |---|-------|-------|-------|-------|
 | 8 | ~~Mach port sızıntısı (3x `mach_host_self()` her 2sn)~~ | `SystemMonitorManager.swift` | — | ✅ |
 | 9 | ~~`CFMachPortCreateRunLoopSource` — CFRelease yapılmıyor~~ | `MediaKeyInterceptor.swift` | 82 | ✅ |
-| 10 | `IOPSNotificationCreateRunLoopSource` retained value düzgün serbest bırakılmıyor | `BatteryActivityManager.swift` | 69-87 | ⏳ |
+| 10 | ~~`IOPSNotificationCreateRunLoopSource` retained value düzgün serbest bırakılmıyor~~ | `BatteryActivityManager.swift` | 69-87 | ✅ |
 | 11 | `BoringViewCoordinator` — `deinit` yok, `accessibilityObserver` asla temizlenmiyor | `BoringViewCoordinator.swift` | 126-136 | ⏳ |
 | 12 | ~~Kullanılmayan `sneakPeekDispatch` ve `expandingViewDispatch` property'leri (dead code)~~ | `BoringViewCoordinator.swift` | 55-56 | ✅ |
 
@@ -135,7 +135,7 @@
 | Seviye | Adet | Çözüldü |
 |--------|------|---------|
 | 🔴 KRİTİK — Çökme | 7 madde (18 instance) | 7 ✅ |
-| 🔴 KRİTİK — Bellek sızıntısı | 5 madde | 4 ✅ |
+| 🔴 KRİTİK — Bellek sızıntısı | 5 madde | 5 ✅ |
 | 🔴 KRİTİK — Thread safety | 6 madde | 5 ✅ |
 | 🟡 ÖNEMLİ — Hata yönetimi | 6 madde | 5 ✅ |
 | 🟡 ÖNEMLİ — Performans | 3 madde | 2 ✅ |
@@ -144,4 +144,4 @@
 | 🟢 İYİLEŞTİRME — Erişilebilirlik | 2 madde | 0 |
 | 🟢 İYİLEŞTİRME — Kod temizliği | 4 madde | 0 |
 | 🟢 İYİLEŞTİRME — Swift 6 | 2 madde | 0 |
-| **TOPLAM** | **44 madde** | **23 çözüldü** |
+| **TOPLAM** | **44 madde** | **24 çözüldü** |
