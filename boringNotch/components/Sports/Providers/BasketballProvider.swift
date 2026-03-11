@@ -13,6 +13,20 @@ import os
 final class BasketballProvider: SportProvider {
     let sportType: SportType = .basketball
     private let logger = Logger(subsystem: "com.dynanotch.app", category: "BasketballProvider")
+    private let urlSession: URLSession = {
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = 15
+        config.timeoutIntervalForResource = 30
+        return URLSession(configuration: config)
+    }()
+
+    private func fetchData(from url: URL) async throws -> Data {
+        let (data, response) = try await urlSession.data(from: url)
+        guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
+            throw URLError(.badServerResponse)
+        }
+        return data
+    }
 
     // NBA data
     private(set) var nbaGames: [BasketballGame] = []
@@ -154,7 +168,7 @@ final class BasketballProvider: SportProvider {
             let from = df.string(from: Date())
             let to = df.string(from: Date().addingTimeInterval(7 * 86400))
             guard let url = URL(string: "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=\(from)-\(to)") else { return }
-            let (data, _) = try await URLSession.shared.data(from: url)
+            let data = try await fetchData(from: url)
             let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] ?? [:]
             let events = json["events"] as? [[String: Any]] ?? []
             nbaGames = events.compactMap(parseGame).sorted { $0.startDate < $1.startDate }
@@ -166,7 +180,7 @@ final class BasketballProvider: SportProvider {
     private func refreshNBAStandings() async {
         do {
             guard let url = URL(string: "https://site.api.espn.com/apis/v2/sports/basketball/nba/standings") else { return }
-            let (data, _) = try await URLSession.shared.data(from: url)
+            let data = try await fetchData(from: url)
             let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] ?? [:]
             let children = json["children"] as? [[String: Any]] ?? []
             var all: [BasketballStanding] = []

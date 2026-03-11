@@ -6,12 +6,14 @@
 //
 
 import Foundation
+import os
 
 // Access model types
 @_exported import struct Foundation.URL
 
 
 final class ShelfPersistenceService {
+    private let logger = Logger(subsystem: "com.dynanotch.app", category: "ShelfPersistence")
     static let shared = ShelfPersistenceService()
 
     private let fileURL: URL
@@ -20,9 +22,19 @@ final class ShelfPersistenceService {
 
     private init() {
         let fm = FileManager.default
-        let support = try? fm.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-        let dir = (support ?? fm.temporaryDirectory).appendingPathComponent("boringNotch", isDirectory: true).appendingPathComponent("Shelf", isDirectory: true)
-        try? fm.createDirectory(at: dir, withIntermediateDirectories: true)
+        let support: URL
+        do {
+            support = try fm.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        } catch {
+            logger.warning("Could not access Application Support: \(error.localizedDescription)")
+            support = fm.temporaryDirectory
+        }
+        let dir = support.appendingPathComponent("boringNotch", isDirectory: true).appendingPathComponent("Shelf", isDirectory: true)
+        do {
+            try fm.createDirectory(at: dir, withIntermediateDirectories: true)
+        } catch {
+            logger.warning("Could not create Shelf directory: \(error.localizedDescription)")
+        }
         fileURL = dir.appendingPathComponent("items.json")
         encoder.outputFormatting = [.prettyPrinted]
         decoder.dateDecodingStrategy = .iso8601
@@ -75,7 +87,7 @@ final class ShelfPersistenceService {
             let data = try encoder.encode(items)
             try data.write(to: fileURL, options: Data.WritingOptions.atomic)
         } catch {
-            print("Failed to save shelf items: \(error.localizedDescription)")
+            logger.error("Failed to save shelf items: \(error.localizedDescription)")
         }
     }
 }

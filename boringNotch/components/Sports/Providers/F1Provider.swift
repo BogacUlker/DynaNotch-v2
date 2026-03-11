@@ -13,6 +13,12 @@ import os
 final class F1Provider: SportProvider {
     let sportType: SportType = .f1
     private let logger = Logger(subsystem: "com.dynanotch.app", category: "F1Provider")
+    private let urlSession: URLSession = {
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = 15
+        config.timeoutIntervalForResource = 30
+        return URLSession(configuration: config)
+    }()
 
     private(set) var currentSession: F1Session?
     private(set) var livePositions: [F1LivePosition] = []
@@ -109,12 +115,21 @@ final class F1Provider: SportProvider {
         }
     }
 
+    /// Fetch data with HTTP status validation.
+    private func fetchData(from url: URL) async throws -> Data {
+        let (data, response) = try await urlSession.data(from: url)
+        guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
+            throw URLError(.badServerResponse)
+        }
+        return data
+    }
+
     // MARK: - OpenF1 API (Live)
 
     private func refreshLiveSession() async {
         do {
             guard let sessURL = URL(string: "https://api.openf1.org/v1/sessions?session_key=latest") else { return }
-            let (sessData, _) = try await URLSession.shared.data(from: sessURL)
+            let sessData = try await fetchData(from: sessURL)
             let sessArr = try JSONSerialization.jsonObject(with: sessData) as? [[String: Any]] ?? []
             guard let sessInfo = sessArr.first else {
                 currentSession = nil
@@ -148,7 +163,7 @@ final class F1Provider: SportProvider {
 
             if isLive {
                 guard let posURL = URL(string: "https://api.openf1.org/v1/position?session_key=\(sessionKey)&position<=20") else { return }
-                let (posData, _) = try await URLSession.shared.data(from: posURL)
+                let posData = try await fetchData(from: posURL)
                 let posArr = try JSONSerialization.jsonObject(with: posData) as? [[String: Any]] ?? []
                 var latest: [Int: [String: Any]] = [:]
                 for entry in posArr {
@@ -195,7 +210,7 @@ final class F1Provider: SportProvider {
     private func refreshCalendar() async {
         do {
             guard let url = URL(string: "https://api.jolpi.ca/ergast/f1/current.json") else { return }
-            let (data, _) = try await URLSession.shared.data(from: url)
+            let data = try await fetchData(from: url)
             let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] ?? [:]
             let mrData = json["MRData"] as? [String: Any] ?? [:]
             let raceTable = mrData["RaceTable"] as? [String: Any] ?? [:]
@@ -210,7 +225,7 @@ final class F1Provider: SportProvider {
     private func refreshDriverStandings() async {
         do {
             guard let url = URL(string: "https://api.jolpi.ca/ergast/f1/current/driverStandings.json") else { return }
-            let (data, _) = try await URLSession.shared.data(from: url)
+            let data = try await fetchData(from: url)
             let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] ?? [:]
             let mrData = json["MRData"] as? [String: Any] ?? [:]
             let table = mrData["StandingsTable"] as? [String: Any] ?? [:]
@@ -230,7 +245,7 @@ final class F1Provider: SportProvider {
     private func refreshConstructorStandings() async {
         do {
             guard let url = URL(string: "https://api.jolpi.ca/ergast/f1/current/constructorStandings.json") else { return }
-            let (data, _) = try await URLSession.shared.data(from: url)
+            let data = try await fetchData(from: url)
             let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] ?? [:]
             let mrData = json["MRData"] as? [String: Any] ?? [:]
             let table = mrData["StandingsTable"] as? [String: Any] ?? [:]

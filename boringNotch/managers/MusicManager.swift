@@ -458,6 +458,7 @@ class MusicManager: ObservableObject {
                 self.syncedLyrics = []
             }
         } catch {
+            NSLog("[MusicManager] lyrics fetch failed: \(error.localizedDescription)")
             self.currentLyrics = ""
             self.isFetchingLyrics = false
             self.syncedLyrics = []

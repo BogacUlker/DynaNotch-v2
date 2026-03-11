@@ -12,6 +12,20 @@ import os
 /// Used as a sub-provider within BasketballProvider.
 final class EuroLeagueProvider {
     private let logger = Logger(subsystem: "com.dynanotch.app", category: "EuroLeagueProvider")
+    private let urlSession: URLSession = {
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = 15
+        config.timeoutIntervalForResource = 30
+        return URLSession(configuration: config)
+    }()
+
+    private func fetchData(from url: URL) async throws -> Data {
+        let (data, response) = try await urlSession.data(from: url)
+        guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
+            throw URLError(.badServerResponse)
+        }
+        return data
+    }
 
     private(set) var games: [BasketballGame] = []
     private(set) var standings: [BasketballStanding] = []
@@ -59,11 +73,11 @@ final class EuroLeagueProvider {
                   let resultsURL = URL(string: "https://api-live.euroleague.net/v1/results?seasonCode=\(season)")
             else { return }
 
-            async let scheduleData = URLSession.shared.data(from: scheduleURL)
-            async let resultsData = URLSession.shared.data(from: resultsURL)
+            async let scheduleData = fetchData(from: scheduleURL)
+            async let resultsData = fetchData(from: resultsURL)
 
-            let (sData, _) = try await scheduleData
-            let (rData, _) = try await resultsData
+            let sData = try await scheduleData
+            let rData = try await resultsData
 
             let resultsParser = EuroLeagueXMLParser(mode: .results)
             resultsParser.parse(data: rData)

@@ -16,6 +16,20 @@ import os
 final class FootballProvider: SportProvider {
     let sportType: SportType = .football
     private let logger = Logger(subsystem: "com.dynanotch.app", category: "FootballProvider")
+    private let urlSession: URLSession = {
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = 15
+        config.timeoutIntervalForResource = 30
+        return URLSession(configuration: config)
+    }()
+
+    private func fetchData(from url: URL) async throws -> Data {
+        let (data, response) = try await urlSession.data(from: url)
+        guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
+            throw URLError(.badServerResponse)
+        }
+        return data
+    }
 
     private(set) var matches: [FootballMatch] = []
     private(set) var standings: [String: [FootballStanding]] = [:]
@@ -147,7 +161,7 @@ final class FootballProvider: SportProvider {
         let from = df.string(from: Date())
         let to = df.string(from: Date().addingTimeInterval(14 * 86400))
         guard let url = URL(string: "https://site.api.espn.com/apis/site/v2/sports/soccer/\(league)/scoreboard?dates=\(from)-\(to)") else { return [] }
-        let (data, _) = try await URLSession.shared.data(from: url)
+        let data = try await fetchData(from: url)
         let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] ?? [:]
         let events = json["events"] as? [[String: Any]] ?? []
         return events.compactMap { parseMatch($0, league: league) }
@@ -155,7 +169,7 @@ final class FootballProvider: SportProvider {
 
     private func fetchStandings(league: String) async throws -> [FootballStanding] {
         guard let url = URL(string: "https://site.api.espn.com/apis/v2/sports/soccer/\(league)/standings") else { return [] }
-        let (data, _) = try await URLSession.shared.data(from: url)
+        let data = try await fetchData(from: url)
         let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] ?? [:]
         let children = json["children"] as? [[String: Any]] ?? []
         guard let first = children.first else { return [] }

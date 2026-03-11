@@ -65,10 +65,7 @@ class CalendarManager: ObservableObject {
 
     func checkCalendarAuthorization() async {
         let status = EKEventStore.authorizationStatus(for: .event)
-        DispatchQueue.main.async {
-            print("📅 Current calendar authorization status: \(status)")
-            self.calendarAuthorizationStatus = status
-        }
+        self.calendarAuthorizationStatus = status
 
         switch status {
         case .notDetermined:
@@ -102,10 +99,7 @@ class CalendarManager: ObservableObject {
     
     func checkReminderAuthorization() async {
         let status = EKEventStore.authorizationStatus(for: .reminder)
-        DispatchQueue.main.async {
-            print("📅 Current reminder authorization status: \(status)")
-            self.reminderAuthorizationStatus = status
-        }
+        self.reminderAuthorizationStatus = status
 
         switch status {
         case .notDetermined:

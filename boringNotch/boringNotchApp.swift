@@ -397,7 +397,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                             await MainActor.run {
                                 viewModel?.close()
                             }
-                        } catch { }
+                        } catch { /* Task.sleep cancelled — notch stays open */ }
                     }
                     self.closeNotchTask = task
                 case .open:

@@ -53,12 +53,12 @@
 
 | # | Sorun | Dosya | Satır | Durum |
 |---|-------|-------|-------|-------|
-| 19 | Boş `catch { }` bloğu — hata yutulmuş | `boringNotchApp.swift` | 400 | ⏳ |
-| 20 | Spor provider'ları HTTP status code kontrol etmiyor (4 dosya, 8+ istek) | `F1/Basketball/Football/EuroLeague Provider` | çeşitli | ⏳ |
-| 21 | Spor provider'ları timeout ayarı yok — istek sonsuza kadar bekleyebilir | Aynı dosyalar | çeşitli | ⏳ |
-| 22 | `ShelfPersistenceService` — `try?` ile dosya hataları yutulmuş | `ShelfPersistenceService.swift` | 23-26 | ⏳ |
-| 23 | Lyrics fetch — JSON hataları log'lanmıyor | `MusicManager.swift` | 432-460 | ⏳ |
-| 24 | 15+ yerde `try?` ile hatalar sessizce yutulmuş | Proje geneli | — | ⏳ |
+| 19 | ~~Boş `catch { }` bloğu — hata yutulmuş~~ | `boringNotchApp.swift` | 400 | ✅ |
+| 20 | ~~Spor provider'ları HTTP status code kontrol etmiyor (4 dosya, 8+ istek)~~ | `F1/Basketball/Football/EuroLeague Provider` | çeşitli | ✅ |
+| 21 | ~~Spor provider'ları timeout ayarı yok — istek sonsuza kadar bekleyebilir~~ | Aynı dosyalar | çeşitli | ✅ |
+| 22 | ~~`ShelfPersistenceService` — `try?` ile dosya hataları yutulmuş~~ | `ShelfPersistenceService.swift` | 23-26 | ✅ |
+| 23 | ~~Lyrics fetch — JSON hataları log'lanmıyor~~ | `MusicManager.swift` | 432-460 | ✅ |
+| 24 | 15+ yerde `try?` ile hatalar sessizce yutulmuş | Proje geneli | — | ⚠️ |
 
 **Çözüm:** `try?` kullanımlarını `do/catch` + `Logger` ile değiştir. Spor API'lerine timeout ve HTTP status kontrolü ekle.
 
@@ -69,8 +69,8 @@
 | # | Sorun | Dosya | Durum |
 |---|-------|-------|-------|
 | 25 | ~~Batarya/disk metrikleri her 2sn güncelleniyor~~ | `SystemMonitorManager.swift` | ✅ |
-| 26 | `CalendarManager` — `@MainActor` olmasına rağmen gereksiz `DispatchQueue.main.async` kullanıyor | `CalendarManager.swift:68-70` | ⏳ |
-| 27 | `WeatherManager` — URLSession completion'da arka plan thread'inde veri işliyor, sonra `Task { @MainActor }` ile UI güncelliyor | `WeatherManager.swift:191-245` | ⏳ |
+| 26 | ~~`CalendarManager` — `@MainActor` olmasına rağmen gereksiz `DispatchQueue.main.async` kullanıyor~~ | `CalendarManager.swift:68-70` | ✅ |
+| 27 | `WeatherManager` — URLSession completion'da arka plan thread'inde veri işliyor, sonra `Task { @MainActor }` ile UI güncelliyor | `WeatherManager.swift:191-245` | ⚠️ |
 
 ---
 
@@ -137,11 +137,11 @@
 | 🔴 KRİTİK — Çökme | 7 madde (18 instance) | 7 ✅ |
 | 🔴 KRİTİK — Bellek sızıntısı | 5 madde | 4 ✅ |
 | 🔴 KRİTİK — Thread safety | 6 madde | 5 ✅ |
-| 🟡 ÖNEMLİ — Hata yönetimi | 6 madde | 0 |
-| 🟡 ÖNEMLİ — Performans | 3 madde | 1 ✅ |
+| 🟡 ÖNEMLİ — Hata yönetimi | 6 madde | 5 ✅ |
+| 🟡 ÖNEMLİ — Performans | 3 madde | 2 ✅ |
 | 🟡 ÖNEMLİ — Lifecycle | 3 madde | 0 |
 | 🟢 İYİLEŞTİRME — Lokalizasyon | 6 madde | 0 |
 | 🟢 İYİLEŞTİRME — Erişilebilirlik | 2 madde | 0 |
 | 🟢 İYİLEŞTİRME — Kod temizliği | 4 madde | 0 |
 | 🟢 İYİLEŞTİRME — Swift 6 | 2 madde | 0 |
-| **TOPLAM** | **44 madde** | **17 çözüldü** |
+| **TOPLAM** | **44 madde** | **23 çözüldü** |
