@@ -23,7 +23,10 @@ struct BoringLargeButtons: View {
                         Text(title).font(.body)
                     }
                 }
-            }).buttonStyle(PlainButtonStyle()).shadow(color: .black.opacity(0.5), radius: 10)
+            })
+            .buttonStyle(PlainButtonStyle())
+            .shadow(color: .black.opacity(0.5), radius: 10)
+            .accessibilityLabel(title)
     }
 }
 
@@ -65,7 +68,9 @@ struct BoringExtrasMenu : View {
                 }
             }
         }
-        .buttonStyle(PlainButtonStyle()).shadow(color: .black.opacity(0.5), radius: 10)
+        .buttonStyle(PlainButtonStyle())
+        .shadow(color: .black.opacity(0.5), radius: 10)
+        .accessibilityLabel("Settings")
     }
     
     var hide: some View {

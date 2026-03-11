@@ -103,8 +103,8 @@
 
 | # | Sorun | Dosya | Durum |
 |---|-------|-------|-------|
-| 37 | 50+ interaktif buton accessibility label'sız | `BoringHeader.swift`, `BoringExtrasMenu.swift`, `NotchHomeView.swift`, `HoverButton.swift` | ⏳ |
-| 38 | Tüm projede sadece 1 adet `.accessibilityLabel` var | `BoringCalendar.swift:471` | ⏳ |
+| 37 | ~~50+ interaktif buton accessibility label'sız~~ | `HoverButton`, `BoringLargeButtons`, `TabButton`, `BoringHeader`, `PomodoroView` | ✅ |
+| 38 | ~~Tüm projede sadece 1 adet `.accessibilityLabel` var~~ | 20+ label eklendi (bileşen bazlı yayılır) | ✅ |
 
 **Çözüm:** Tüm `Button` ve interaktif elemanlara `.accessibilityLabel()` ekle.
 
@@ -141,7 +141,7 @@
 | 🟡 ÖNEMLİ — Performans | 3 madde | 2 ✅ |
 | 🟡 ÖNEMLİ — Lifecycle | 3 madde | 0 |
 | 🟢 İYİLEŞTİRME — Lokalizasyon | 6 madde | 6 ✅ |
-| 🟢 İYİLEŞTİRME — Erişilebilirlik | 2 madde | 0 |
+| 🟢 İYİLEŞTİRME — Erişilebilirlik | 2 madde | 2 ✅ |
 | 🟢 İYİLEŞTİRME — Kod temizliği | 4 madde | 2 ✅ |
 | 🟢 İYİLEŞTİRME — Swift 6 | 2 madde | 0 |
-| **TOPLAM** | **44 madde** | **32 çözüldü** |
+| **TOPLAM** | **44 madde** | **34 çözüldü** |

@@ -95,6 +95,7 @@ struct PomodoroView: View {
                         .clipShape(Circle())
                 }
                 .buttonStyle(PlainButtonStyle())
+                .accessibilityLabel(manager.isRunning ? "Pause timer" : "Start timer")
 
                 Button {
                     manager.skip()
@@ -107,6 +108,7 @@ struct PomodoroView: View {
                         .clipShape(Circle())
                 }
                 .buttonStyle(PlainButtonStyle())
+                .accessibilityLabel("Skip to next phase")
 
                 Button {
                     manager.reset()
@@ -119,6 +121,7 @@ struct PomodoroView: View {
                         .clipShape(Circle())
                 }
                 .buttonStyle(PlainButtonStyle())
+                .accessibilityLabel("Reset timer")
             }
         }
     }

@@ -90,6 +90,7 @@ struct BoringHeader: View {
                                     }
                             }
                             .buttonStyle(PlainButtonStyle())
+                            .accessibilityLabel("Toggle camera preview")
                         }
                         if Defaults[.settingsIconInNotch] {
                             Button(action: {
@@ -105,6 +106,7 @@ struct BoringHeader: View {
                                     }
                             }
                             .buttonStyle(PlainButtonStyle())
+                            .accessibilityLabel("Settings")
                         }
                         if Defaults[.showBatteryIndicator] {
                             BoringBatteryView(

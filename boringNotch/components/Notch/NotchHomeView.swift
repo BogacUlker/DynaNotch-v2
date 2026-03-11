@@ -241,37 +241,37 @@ struct MusicControlsView: View {
     private func slotView(for slot: MusicControlButton) -> some View {
         switch slot {
         case .shuffle:
-            HoverButton(icon: "shuffle", iconColor: musicManager.isShuffled ? .red : .primary, scale: .medium) {
+            HoverButton(icon: "shuffle", iconColor: musicManager.isShuffled ? .red : .primary, scale: .medium, action: {
                 MusicManager.shared.toggleShuffle()
-            }
+            }, label: "Toggle shuffle")
         case .previous:
-            HoverButton(icon: "backward.fill", scale: .medium) {
+            HoverButton(icon: "backward.fill", scale: .medium, action: {
                 MusicManager.shared.previousTrack()
-            }
+            }, label: "Previous track")
         case .playPause:
-            HoverButton(icon: musicManager.isPlaying ? "pause.fill" : "play.fill", scale: .large) {
+            HoverButton(icon: musicManager.isPlaying ? "pause.fill" : "play.fill", scale: .large, action: {
                 MusicManager.shared.togglePlay()
-            }
+            }, label: musicManager.isPlaying ? "Pause" : "Play")
         case .next:
-            HoverButton(icon: "forward.fill", scale: .medium) {
+            HoverButton(icon: "forward.fill", scale: .medium, action: {
                 MusicManager.shared.nextTrack()
-            }
+            }, label: "Next track")
         case .repeatMode:
-            HoverButton(icon: repeatIcon, iconColor: repeatIconColor, scale: .medium) {
+            HoverButton(icon: repeatIcon, iconColor: repeatIconColor, scale: .medium, action: {
                 MusicManager.shared.toggleRepeat()
-            }
+            }, label: "Toggle repeat")
         case .volume:
             VolumeControlView()
         case .favorite:
             FavoriteControlButton()
         case .goBackward:
-            HoverButton(icon: "gobackward.15", scale: .medium) {
+            HoverButton(icon: "gobackward.15", scale: .medium, action: {
                 MusicManager.shared.skip(seconds: -15)
-            }
+            }, label: "Skip backward 15 seconds")
         case .goForward:
-            HoverButton(icon: "goforward.15", scale: .medium) {
+            HoverButton(icon: "goforward.15", scale: .medium, action: {
                 MusicManager.shared.skip(seconds: 15)
-            }
+            }, label: "Skip forward 15 seconds")
         case .none:
             Color.clear.frame(height: 1)
         }
