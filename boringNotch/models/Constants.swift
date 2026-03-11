@@ -219,4 +219,11 @@ extension Defaults.Keys {
     static let pomodoroTodayCycles = Key<Int>("pomodoroTodayCycles", default: 0)
     static let pomodoroTodayFocusMinutes = Key<Int>("pomodoroTodayFocusMinutes", default: 0)
     static let pomodoroTodayDate = Key<String>("pomodoroTodayDate", default: "")
+
+    // MARK: Weather
+    static let enableWeather = Key<Bool>("enableWeather", default: false)
+    static let temperatureUnit = Key<String>("temperatureUnit", default: "celsius")
+    static let weatherManualCity = Key<String>("weatherManualCity", default: "")
+    static let weatherUpdateInterval = Key<Int>("weatherUpdateInterval", default: 10)
+    static let weatherShowHumidity = Key<Bool>("weatherShowHumidity", default: false)
 }

@@ -18,6 +18,7 @@ let tabs = [
     TabModel(label: "Home", icon: "house.fill", view: .home),
     TabModel(label: "Shelf", icon: "tray.fill", view: .shelf),
     TabModel(label: "Pomodoro", icon: "timer", view: .pomodoro),
+    TabModel(label: "Weather", icon: "cloud.sun.fill", view: .weather),
 ]
 
 struct TabSelectionView: View {

@@ -24,6 +24,7 @@ struct ContentView: View {
     @ObservedObject var brightnessManager = BrightnessManager.shared
     @ObservedObject var volumeManager = VolumeManager.shared
     @ObservedObject var pomodoroManager = PomodoroManager.shared
+    @ObservedObject var weatherManager = WeatherManager.shared
     @State private var hoverTask: Task<Void, Never>?
     @State private var isHovering: Bool = false
     @State private var anyDropDebounceTask: Task<Void, Never>?
@@ -291,6 +292,9 @@ struct ContentView: View {
                       } else if vm.notchState == .closed && !vm.hideOnClosed && !coordinator.expandingView.show && pomodoroManager.timerState != .idle && !(musicManager.isPlaying || !musicManager.isPlayerIdle) {
                           PomodoroClosedNotchView()
                               .frame(alignment: .center)
+                      } else if vm.notchState == .closed && !vm.hideOnClosed && !coordinator.expandingView.show && Defaults[.enableWeather] && weatherManager.temperature != nil && !(musicManager.isPlaying || !musicManager.isPlayerIdle) && pomodoroManager.timerState == .idle {
+                          WeatherClosedNotchView()
+                              .frame(alignment: .center)
                       } else if (!coordinator.expandingView.show || coordinator.expandingView.type == .music) && vm.notchState == .closed && (musicManager.isPlaying || !musicManager.isPlayerIdle) && coordinator.musicLiveActivityEnabled && !vm.hideOnClosed {
                           MusicLiveActivity()
                               .frame(alignment: .center)
@@ -359,7 +363,7 @@ struct ContentView: View {
                       }
                   }
               }
-              .conditionalModifier((coordinator.sneakPeek.show && (coordinator.sneakPeek.type == .music) && vm.notchState == .closed && !vm.hideOnClosed && Defaults[.sneakPeekStyles] == .standard) || (coordinator.sneakPeek.show && (coordinator.sneakPeek.type != .music) && (vm.notchState == .closed)) || (enableLyrics && showLyricsOnClosedNotch && !musicManager.syncedLyrics.isEmpty && musicManager.isPlaying && vm.notchState == .closed && !vm.hideOnClosed && coordinator.musicLiveActivityEnabled && !coordinator.sneakPeek.show) || (vm.notchState == .closed && !vm.hideOnClosed && pomodoroManager.timerState != .idle)) { view in
+              .conditionalModifier((coordinator.sneakPeek.show && (coordinator.sneakPeek.type == .music) && vm.notchState == .closed && !vm.hideOnClosed && Defaults[.sneakPeekStyles] == .standard) || (coordinator.sneakPeek.show && (coordinator.sneakPeek.type != .music) && (vm.notchState == .closed)) || (enableLyrics && showLyricsOnClosedNotch && !musicManager.syncedLyrics.isEmpty && musicManager.isPlaying && vm.notchState == .closed && !vm.hideOnClosed && coordinator.musicLiveActivityEnabled && !coordinator.sneakPeek.show) || (vm.notchState == .closed && !vm.hideOnClosed && pomodoroManager.timerState != .idle) || (vm.notchState == .closed && !vm.hideOnClosed && Defaults[.enableWeather] && weatherManager.temperature != nil)) { view in
                   view
                       .fixedSize()
               }
@@ -373,6 +377,8 @@ struct ContentView: View {
                         ShelfView()
                     case .pomodoro:
                         PomodoroView()
+                    case .weather:
+                        WeatherView()
                     }
                 }
                 .transition(
@@ -442,6 +448,35 @@ struct ContentView: View {
                     .foregroundStyle(phaseColor.opacity(0.7))
             }
             .frame(width: 40, alignment: .trailing)
+        }
+        .frame(height: vm.effectiveClosedNotchHeight, alignment: .center)
+    }
+
+    @ViewBuilder
+    func WeatherClosedNotchView() -> some View {
+        HStack(spacing: 0) {
+            HStack(spacing: 4) {
+                Image(systemName: weatherManager.sfSymbol)
+                    .font(.system(size: 10))
+                    .symbolRenderingMode(.multicolor)
+                Text(weatherManager.temperatureDisplay)
+                    .font(.system(size: 11, weight: .medium, design: .monospaced))
+                    .foregroundStyle(.white)
+            }
+
+            Rectangle()
+                .fill(.black)
+                .frame(width: vm.closedNotchSize.width + 10)
+
+            HStack(spacing: 2) {
+                if !weatherManager.cityName.isEmpty {
+                    Text(weatherManager.cityName)
+                        .font(.system(size: 9, weight: .medium))
+                        .foregroundStyle(.gray)
+                        .lineLimit(1)
+                }
+            }
+            .frame(width: 60, alignment: .trailing)
         }
         .frame(height: vm.effectiveClosedNotchHeight, alignment: .center)
     }

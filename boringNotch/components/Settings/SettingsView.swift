@@ -54,6 +54,9 @@ struct SettingsView: View {
                 NavigationLink(value: "Pomodoro") {
                     Label("Pomodoro", systemImage: "timer")
                 }
+                NavigationLink(value: "Weather") {
+                    Label("Weather", systemImage: "cloud.sun.fill")
+                }
                 NavigationLink(value: "Shortcuts") {
                     Label("Shortcuts", systemImage: "keyboard")
                 }
@@ -90,6 +93,8 @@ struct SettingsView: View {
                     Shelf()
                 case "Pomodoro":
                     PomodoroSettings()
+                case "Weather":
+                    WeatherSettings()
                 case "Shortcuts":
                     Shortcuts()
                 case "Extensions":
@@ -1863,6 +1868,66 @@ struct PomodoroSettings: View {
         }
         .accentColor(.effectiveAccent)
         .navigationTitle("Pomodoro")
+    }
+}
+
+// MARK: - Weather Settings
+
+struct WeatherSettings: View {
+    @Default(.enableWeather) var enableWeather
+    @Default(.temperatureUnit) var temperatureUnit
+    @Default(.weatherManualCity) var manualCity
+    @Default(.weatherUpdateInterval) var updateInterval
+    @Default(.weatherShowHumidity) var showHumidity
+
+    var body: some View {
+        Form {
+            Section {
+                Defaults.Toggle(key: .enableWeather) {
+                    Text("Enable weather")
+                }
+            } header: {
+                Text("General")
+            }
+
+            Section {
+                Picker("Temperature unit", selection: $temperatureUnit) {
+                    Text("Celsius").tag("celsius")
+                    Text("Fahrenheit").tag("fahrenheit")
+                }
+                Defaults.Toggle(key: .weatherShowHumidity) {
+                    Text("Show humidity")
+                }
+            } header: {
+                Text("Display")
+            }
+
+            Section {
+                TextField("City name (leave empty for auto-detect)", text: $manualCity)
+                    .textFieldStyle(.roundedBorder)
+            } header: {
+                Text("Location")
+            } footer: {
+                Text("Leave empty to use your current location. Type a city name to set it manually.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Section {
+                HStack {
+                    Text("Update interval")
+                    Spacer()
+                    Text("\(updateInterval) min")
+                        .foregroundStyle(.secondary)
+                    Stepper("", value: $updateInterval, in: 5...60, step: 5)
+                        .labelsHidden()
+                }
+            } header: {
+                Text("Refresh")
+            }
+        }
+        .accentColor(.effectiveAccent)
+        .navigationTitle("Weather")
     }
 }
 
