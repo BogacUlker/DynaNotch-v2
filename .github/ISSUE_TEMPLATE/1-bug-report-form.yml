@@ -30,10 +30,9 @@ body:
   - type: dropdown
     id: version
     attributes:
-      label: Boring Notch Version
+      label: DynaNotch Version
       description: >-
-        What version of our software are you running? (Go to ✦ in the menu bar >
-        Settings > About)
+        What version are you running? (Check in the menu bar > Settings > About)
       options:
         - Select a version
         - v1.0.0
@@ -43,16 +42,16 @@ body:
     id: operating-system
     attributes:
       label: macOS Version
-      description: Go to  > About This Mac
+      description: Go to  > About This Mac
     validations:
       required: true
   - type: dropdown
     id: music-source
     attributes:
-      label: Music Source? (If relevant)
+      label: Music Source (if relevant)
       description: >-
         If this issue is related to music, what music source did you select in
-        Boring Notch settings?
+        DynaNotch settings?
       options:
         - Now Playing
         - Apple Music
@@ -63,13 +62,7 @@ body:
   - type: input
     id: music-app
     attributes:
-      label: Music App (If using Now Playing)
-    validations:
-      required: false
-  - type: input
-    id: music-website
-    attributes:
-      label: Website (If using browser for music)
+      label: Music App (if using Now Playing)
     validations:
       required: false
   - type: textarea
@@ -84,7 +77,6 @@ body:
     id: checks
     attributes:
       label: Checks
-      description: 
       options:
-        - label: I haven't found any duplicates with my issue.
+        - label: I have searched existing issues to ensure this isn't a duplicate.
           required: true
