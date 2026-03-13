@@ -112,17 +112,42 @@ final class EuroLeagueProvider {
 
     // MARK: - Public Queries
 
-    var hasStandingsData: Bool { !standings.isEmpty }
+    var hasStandingsData: Bool { !standings.isEmpty || true } // Always true — fallback to static list
+
+    /// Known EuroLeague teams as fallback when API data is unavailable.
+    private static let staticTeams: [(abbrev: String, displayName: String)] = [
+        ("ULK", "Anadolu Efes (ULK)"),
+        ("ASV", "ASVEL Villeurbanne (ASV)"),
+        ("BAR", "FC Barcelona (BAR)"),
+        ("BAS", "Baskonia (BAS)"),
+        ("BAY", "FC Bayern Munich (BAY)"),
+        ("RED", "Crvena Zvezda (RED)"),
+        ("FEN", "Fenerbahce (FEN)"),
+        ("MCI", "Maccabi Tel Aviv (MCI)"),
+        ("MAD", "Real Madrid (MAD)"),
+        ("MIL", "EA7 Olimpia Milano (MIL)"),
+        ("MON", "AS Monaco (MON)"),
+        ("OLY", "Olympiacos (OLY)"),
+        ("PAM", "Panathinaikos (PAM)"),
+        ("PAR", "Partizan Belgrade (PAR)"),
+        ("PBB", "Paris Basketball (PBB)"),
+        ("VIR", "Virtus Bologna (VIR)"),
+        ("ZAL", "Zalgiris Kaunas (ZAL)"),
+        ("ALB", "Alba Berlin (ALB)"),
+    ].sorted { $0.displayName < $1.displayName }
 
     func allTeams() -> [(abbrev: String, displayName: String)] {
-        var seen = Set<String>()
-        var result: [(abbrev: String, displayName: String)] = []
-        for team in standings {
-            guard !team.teamAbbrev.isEmpty, !seen.contains(team.teamAbbrev) else { continue }
-            seen.insert(team.teamAbbrev)
-            result.append((abbrev: team.teamAbbrev, displayName: "\(team.teamName) (\(team.teamAbbrev))"))
+        if !standings.isEmpty {
+            var seen = Set<String>()
+            var result: [(abbrev: String, displayName: String)] = []
+            for team in standings {
+                guard !team.teamAbbrev.isEmpty, !seen.contains(team.teamAbbrev) else { continue }
+                seen.insert(team.teamAbbrev)
+                result.append((abbrev: team.teamAbbrev, displayName: "\(team.teamName) (\(team.teamAbbrev))"))
+            }
+            return result.sorted { $0.displayName < $1.displayName }
         }
-        return result.sorted { $0.displayName < $1.displayName }
+        return Self.staticTeams
     }
 
     func liveEvents() -> [SportEvent] {
