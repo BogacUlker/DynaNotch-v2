@@ -9,12 +9,14 @@ import AppKit
 import ApplicationServices
 import Defaults
 import AVFoundation
+import os
 
 private let kSystemDefinedEventType = CGEventType(rawValue: 14)!
 
 final class MediaKeyInterceptor {
     static let shared = MediaKeyInterceptor()
-    
+    private let logger = Logger(subsystem: "com.dynanotch.app", category: "MediaKeyInterceptor")
+
     private enum NXKeyType: Int {
         case soundUp = 0
         case soundDown = 1
@@ -24,46 +26,92 @@ final class MediaKeyInterceptor {
         case keyboardBrightnessUp = 21
         case keyboardBrightnessDown = 22
     }
-    
+
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
     private let step: Float = 1.0 / 16.0
     private var audioPlayer: AVAudioPlayer?
-    
+
     private init() {}
-    
-    // MARK: - Accessibility (via XPC)
-    
+
+    // MARK: - Accessibility
+
+    /// Check accessibility directly from the main app process (where the event tap lives).
+    private func isProcessAccessibilityAuthorized() -> Bool {
+        AXIsProcessTrusted()
+    }
+
+    /// Prompt the user for accessibility authorization from the main app process.
+    private func promptAccessibilityAuthorization() {
+        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
+        AXIsProcessTrustedWithOptions(options)
+    }
+
     func requestAccessibilityAuthorization() {
-        XPCHelperClient.shared.requestAccessibilityAuthorization()
+        // Try direct prompt first, fall back to XPC
+        promptAccessibilityAuthorization()
     }
-    
+
     func ensureAccessibilityAuthorization(promptIfNeeded: Bool = false) async -> Bool {
-        await XPCHelperClient.shared.ensureAccessibilityAuthorization(promptIfNeeded: promptIfNeeded)
+        // Check directly from main process first
+        if isProcessAccessibilityAuthorized() {
+            return true
+        }
+        if promptIfNeeded {
+            promptAccessibilityAuthorization()
+            // Give macOS a moment to process
+            try? await Task.sleep(for: .milliseconds(500))
+            if isProcessAccessibilityAuthorized() {
+                return true
+            }
+        }
+        // Fall back to XPC helper
+        return await XPCHelperClient.shared.ensureAccessibilityAuthorization(promptIfNeeded: promptIfNeeded)
     }
-    
+
     // MARK: - Event Tap
-    
+
     func start(promptIfNeeded: Bool = false) async {
-        guard eventTap == nil else { return }
-        
+        guard eventTap == nil else {
+            logger.info("Event tap already exists, skipping start")
+            return
+        }
+
         // Ensure HUD replacement is enabled
         guard Defaults[.hudReplacement] else {
+            logger.info("HUD replacement is disabled, stopping")
             stop()
             return
         }
-        
-        // Check accessibility authorization
-        let authorized = await XPCHelperClient.shared.isAccessibilityAuthorized()
+
+        // Check accessibility directly from the main app process
+        var authorized = isProcessAccessibilityAuthorized()
+        logger.info("Direct accessibility check: \(authorized)")
+
         if !authorized {
-            if promptIfNeeded {
-                let granted = await ensureAccessibilityAuthorization(promptIfNeeded: true)
-                guard granted else { return }
-            } else {
-                return
+            // Try XPC helper as fallback
+            let xpcResult = await XPCHelperClient.shared.isAccessibilityAuthorized()
+            logger.info("XPC accessibility check: \(xpcResult)")
+
+            if !xpcResult {
+                if promptIfNeeded {
+                    logger.info("Prompting for accessibility authorization")
+                    promptAccessibilityAuthorization()
+                    // Wait for user to grant
+                    try? await Task.sleep(for: .seconds(1))
+                    authorized = isProcessAccessibilityAuthorized()
+                    logger.info("Post-prompt accessibility check: \(authorized)")
+                    guard authorized else {
+                        logger.warning("Accessibility not granted after prompt")
+                        return
+                    }
+                } else {
+                    logger.warning("Not authorized and not prompting, aborting start")
+                    return
+                }
             }
         }
-        
+
         let mask = CGEventMask(1 << kSystemDefinedEventType.rawValue)
         eventTap = CGEvent.tapCreate(
             tap: .cghidEventTap,
@@ -77,13 +125,16 @@ final class MediaKeyInterceptor {
             },
             userInfo: UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque())
         )
-        
+
         if let eventTap {
             runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)
             if let runLoopSource {
                 CFRunLoopAddSource(CFRunLoopGetMain(), runLoopSource, .commonModes)
             }
             CGEvent.tapEnable(tap: eventTap, enable: true)
+            logger.info("Event tap created and enabled successfully")
+        } else {
+            logger.error("CGEvent.tapCreate returned nil — accessibility may not be authorized for this process, or the app sandbox is blocking event tap creation")
         }
     }
     

@@ -5,6 +5,7 @@
 //  Created by Richard Kunkli on 07/08/2024.
 //
 
+import ApplicationServices
 import AVFoundation
 import Defaults
 import EventKit
@@ -524,7 +525,7 @@ struct HUD: View {
 
                         HStack(spacing: 12) {
                             Button("Request Accessibility") {
-                                XPCHelperClient.shared.requestAccessibilityAuthorization()
+                                MediaKeyInterceptor.shared.requestAccessibilityAuthorization()
                             }
                             .buttonStyle(.borderedProminent)
                         }
@@ -600,7 +601,12 @@ struct HUD: View {
         .accentColor(.effectiveAccent)
         .navigationTitle("HUDs")
         .task {
-            accessibilityAuthorized = await XPCHelperClient.shared.isAccessibilityAuthorized()
+            // Check directly from main process (where the event tap will run)
+            accessibilityAuthorized = AXIsProcessTrusted()
+            if !accessibilityAuthorized {
+                // Fall back to XPC check
+                accessibilityAuthorized = await XPCHelperClient.shared.isAccessibilityAuthorized()
+            }
         }
         .onAppear {
             XPCHelperClient.shared.startMonitoringAccessibilityAuthorization()
@@ -611,6 +617,9 @@ struct HUD: View {
         .onReceive(NotificationCenter.default.publisher(for: .accessibilityAuthorizationChanged)) { notification in
             if let granted = notification.userInfo?["granted"] as? Bool {
                 accessibilityAuthorized = granted
+            } else {
+                // Also recheck directly
+                accessibilityAuthorized = AXIsProcessTrusted()
             }
         }
     }
