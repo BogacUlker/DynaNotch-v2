@@ -128,9 +128,28 @@
 		B19016222CC15B3D00E3F12E /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = B19016212CC15B3D00E3F12E /* Defaults */; };
 		B19016242CC15B5000E3F12E /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19016232CC15B4D00E3F12E /* Constants.swift */; };
 		B19424092CD0FF01003E5DC2 /* LottieAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19424082CD0FEFE003E5DC2 /* LottieAnimationView.swift */; };
+		B1A000032EF0000100000003 /* PomodoroManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A000012EF0000100000001 /* PomodoroManager.swift */; };
+		B1A000042EF0000100000004 /* PomodoroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A000022EF0000100000002 /* PomodoroView.swift */; };
+		B1A000082EF0000200000008 /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A000062EF0000200000006 /* WeatherManager.swift */; };
+		B1A000092EF0000200000009 /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A000072EF0000200000007 /* WeatherView.swift */; };
 		B1A78C822C8BA08100BD51B0 /* FullscreenMediaDetection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A78C812C8BA08100BD51B0 /* FullscreenMediaDetection.swift */; };
+		B1B00021EF0000300000021 /* SportModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00011EF0000300000011 /* SportModels.swift */; };
+		B1B00022EF0000300000022 /* FootballModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00012EF0000300000012 /* FootballModels.swift */; };
+		B1B00023EF0000300000023 /* BasketballModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00013EF0000300000013 /* BasketballModels.swift */; };
+		B1B00024EF0000300000024 /* F1Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00014EF0000300000014 /* F1Models.swift */; };
+		B1B00025EF0000300000025 /* SportProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00015EF0000300000015 /* SportProvider.swift */; };
+		B1B00026EF0000300000026 /* FootballProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00016EF0000300000016 /* FootballProvider.swift */; };
+		B1B00027EF0000300000027 /* BasketballProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00017EF0000300000017 /* BasketballProvider.swift */; };
+		B1B00028EF0000300000028 /* EuroLeagueProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00018EF0000300000018 /* EuroLeagueProvider.swift */; };
+		B1B00029EF0000300000029 /* F1Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00019EF0000300000019 /* F1Provider.swift */; };
+		B1B0002AEF000030000002A /* SportsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B0001AEF000030000001A /* SportsManager.swift */; };
+		B1B0002BEF000030000002B /* SportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B0001BEF000030000001B /* SportsView.swift */; };
+		B1B0002CEF000030000002C /* SportsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B0001CEF000030000001C /* SportsSettings.swift */; };
 		B1B112912C6A572100093D8F /* EditPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B112902C6A572100093D8F /* EditPanelView.swift */; };
 		B1B112932C6A577E00093D8F /* MouseTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B112922C6A577E00093D8F /* MouseTracker.swift */; };
+		B1C00041EF0000400000041 /* SystemMonitorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C00031EF0000400000031 /* SystemMonitorManager.swift */; };
+		B1C00042EF0000400000042 /* SystemMonitorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C00032EF0000400000032 /* SystemMonitorView.swift */; };
+		B1C00043EF0000400000043 /* SystemMonitorSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C00033EF0000400000033 /* SystemMonitorSettings.swift */; };
 		B1C448962C9712C4001F0858 /* ActionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C448952C9712C4001F0858 /* ActionBar.swift */; };
 		B1C448982C972CC4001F0858 /* ListItemPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C448972C972CC4001F0858 /* ListItemPopover.swift */; };
 		B1C4489B2C97376A001F0858 /* TipStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C4489A2C97376A001F0858 /* TipStore.swift */; };
@@ -143,25 +162,6 @@
 		B1F747F92EC7E94000F841DB /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F747F82EC7E94000F841DB /* LottieView.swift */; };
 		B1FEB4992C7686630066EBBC /* PanGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FEB4982C7686630066EBBC /* PanGesture.swift */; };
 		F38DE6482D8243E7008B5C6D /* BatteryActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38DE6472D8243E2008B5C6D /* BatteryActivityManager.swift */; };
-		B1A000032EF0000100000003 /* PomodoroManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A000012EF0000100000001 /* PomodoroManager.swift */; };
-		B1A000042EF0000100000004 /* PomodoroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A000022EF0000100000002 /* PomodoroView.swift */; };
-		B1A000082EF0000200000008 /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A000062EF0000200000006 /* WeatherManager.swift */; };
-		B1A000092EF0000200000009 /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A000072EF0000200000007 /* WeatherView.swift */; };
-		B1B00021EF0000300000021 /* SportModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00011EF0000300000011 /* SportModels.swift */; };
-		B1B00022EF0000300000022 /* FootballModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00012EF0000300000012 /* FootballModels.swift */; };
-		B1B00023EF0000300000023 /* BasketballModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00013EF0000300000013 /* BasketballModels.swift */; };
-		B1B00024EF0000300000024 /* F1Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00014EF0000300000014 /* F1Models.swift */; };
-		B1B00025EF0000300000025 /* SportProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00015EF0000300000015 /* SportProvider.swift */; };
-		B1B00026EF0000300000026 /* FootballProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00016EF0000300000016 /* FootballProvider.swift */; };
-		B1B00027EF0000300000027 /* BasketballProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00017EF0000300000017 /* BasketballProvider.swift */; };
-		B1B00028EF0000300000028 /* EuroLeagueProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00018EF0000300000018 /* EuroLeagueProvider.swift */; };
-		B1B00029EF0000300000029 /* F1Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B00019EF0000300000019 /* F1Provider.swift */; };
-		B1B0002AEF000030000002A /* SportsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B0001AEF000030000001A /* SportsManager.swift */; };
-		B1C00041EF0000400000041 /* SystemMonitorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C00031EF0000400000031 /* SystemMonitorManager.swift */; };
-		B1C00042EF0000400000042 /* SystemMonitorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C00032EF0000400000032 /* SystemMonitorView.swift */; };
-		B1C00043EF0000400000043 /* SystemMonitorSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C00033EF0000400000033 /* SystemMonitorSettings.swift */; };
-		B1B0002BEF000030000002B /* SportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B0001BEF000030000001B /* SportsView.swift */; };
-		B1B0002CEF000030000002C /* SportsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B0001CEF000030000001C /* SportsSettings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -313,9 +313,28 @@
 		B186543B2C6F49AE000B926A /* ShortcutConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutConstants.swift; sourceTree = "<group>"; };
 		B19016232CC15B4D00E3F12E /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		B19424082CD0FEFE003E5DC2 /* LottieAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationView.swift; sourceTree = "<group>"; };
+		B1A000012EF0000100000001 /* PomodoroManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomodoroManager.swift; sourceTree = "<group>"; };
+		B1A000022EF0000100000002 /* PomodoroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomodoroView.swift; sourceTree = "<group>"; };
+		B1A000062EF0000200000006 /* WeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManager.swift; sourceTree = "<group>"; };
+		B1A000072EF0000200000007 /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
 		B1A78C812C8BA08100BD51B0 /* FullscreenMediaDetection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullscreenMediaDetection.swift; sourceTree = "<group>"; };
+		B1B00011EF0000300000011 /* SportModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportModels.swift; sourceTree = "<group>"; };
+		B1B00012EF0000300000012 /* FootballModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootballModels.swift; sourceTree = "<group>"; };
+		B1B00013EF0000300000013 /* BasketballModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketballModels.swift; sourceTree = "<group>"; };
+		B1B00014EF0000300000014 /* F1Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = F1Models.swift; sourceTree = "<group>"; };
+		B1B00015EF0000300000015 /* SportProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportProvider.swift; sourceTree = "<group>"; };
+		B1B00016EF0000300000016 /* FootballProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootballProvider.swift; sourceTree = "<group>"; };
+		B1B00017EF0000300000017 /* BasketballProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketballProvider.swift; sourceTree = "<group>"; };
+		B1B00018EF0000300000018 /* EuroLeagueProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EuroLeagueProvider.swift; sourceTree = "<group>"; };
+		B1B00019EF0000300000019 /* F1Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = F1Provider.swift; sourceTree = "<group>"; };
+		B1B0001AEF000030000001A /* SportsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportsManager.swift; sourceTree = "<group>"; };
+		B1B0001BEF000030000001B /* SportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportsView.swift; sourceTree = "<group>"; };
+		B1B0001CEF000030000001C /* SportsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportsSettings.swift; sourceTree = "<group>"; };
 		B1B112902C6A572100093D8F /* EditPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPanelView.swift; sourceTree = "<group>"; };
 		B1B112922C6A577E00093D8F /* MouseTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseTracker.swift; sourceTree = "<group>"; };
+		B1C00031EF0000400000031 /* SystemMonitorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMonitorManager.swift; sourceTree = "<group>"; };
+		B1C00032EF0000400000032 /* SystemMonitorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMonitorView.swift; sourceTree = "<group>"; };
+		B1C00033EF0000400000033 /* SystemMonitorSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMonitorSettings.swift; sourceTree = "<group>"; };
 		B1C448952C9712C4001F0858 /* ActionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionBar.swift; sourceTree = "<group>"; };
 		B1C448972C972CC4001F0858 /* ListItemPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemPopover.swift; sourceTree = "<group>"; };
 		B1C4489A2C97376A001F0858 /* TipStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipStore.swift; sourceTree = "<group>"; };
@@ -328,25 +347,6 @@
 		B1F747F82EC7E94000F841DB /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
 		B1FEB4982C7686630066EBBC /* PanGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanGesture.swift; sourceTree = "<group>"; };
 		F38DE6472D8243E2008B5C6D /* BatteryActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryActivityManager.swift; sourceTree = "<group>"; };
-		B1A000012EF0000100000001 /* PomodoroManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomodoroManager.swift; sourceTree = "<group>"; };
-		B1A000022EF0000100000002 /* PomodoroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomodoroView.swift; sourceTree = "<group>"; };
-		B1A000062EF0000200000006 /* WeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManager.swift; sourceTree = "<group>"; };
-		B1A000072EF0000200000007 /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
-		B1B00011EF0000300000011 /* SportModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportModels.swift; sourceTree = "<group>"; };
-		B1B00012EF0000300000012 /* FootballModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootballModels.swift; sourceTree = "<group>"; };
-		B1B00013EF0000300000013 /* BasketballModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketballModels.swift; sourceTree = "<group>"; };
-		B1B00014EF0000300000014 /* F1Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = F1Models.swift; sourceTree = "<group>"; };
-		B1B00015EF0000300000015 /* SportProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportProvider.swift; sourceTree = "<group>"; };
-		B1B00016EF0000300000016 /* FootballProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootballProvider.swift; sourceTree = "<group>"; };
-		B1B00017EF0000300000017 /* BasketballProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketballProvider.swift; sourceTree = "<group>"; };
-		B1B00018EF0000300000018 /* EuroLeagueProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EuroLeagueProvider.swift; sourceTree = "<group>"; };
-		B1B00019EF0000300000019 /* F1Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = F1Provider.swift; sourceTree = "<group>"; };
-		B1B0001AEF000030000001A /* SportsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportsManager.swift; sourceTree = "<group>"; };
-		B1C00031EF0000400000031 /* SystemMonitorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMonitorManager.swift; sourceTree = "<group>"; };
-		B1C00032EF0000400000032 /* SystemMonitorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMonitorView.swift; sourceTree = "<group>"; };
-		B1C00033EF0000400000033 /* SystemMonitorSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMonitorSettings.swift; sourceTree = "<group>"; };
-		B1B0001BEF000030000001B /* SportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportsView.swift; sourceTree = "<group>"; };
-		B1B0001CEF000030000001C /* SportsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportsSettings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -519,69 +519,6 @@
 				1443E7F22C609DCE0027C1FC /* matters.swift */,
 			);
 			path = sizing;
-			sourceTree = "<group>";
-		};
-			B1B00030EF0000300000030 /* Sports */ = {
-			isa = PBXGroup;
-			children = (
-				B1B00031EF0000300000031 /* Models */,
-				B1B00032EF0000300000032 /* Providers */,
-				B1B0001AEF000030000001A /* SportsManager.swift */,
-				B1B0001BEF000030000001B /* SportsView.swift */,
-				B1B0001CEF000030000001C /* SportsSettings.swift */,
-			);
-			path = Sports;
-			sourceTree = "<group>";
-		};
-		B1C00040EF0000400000040 /* SystemMonitor */ = {
-			isa = PBXGroup;
-			children = (
-				B1C00031EF0000400000031 /* SystemMonitorManager.swift */,
-				B1C00032EF0000400000032 /* SystemMonitorView.swift */,
-				B1C00033EF0000400000033 /* SystemMonitorSettings.swift */,
-			);
-			path = SystemMonitor;
-			sourceTree = "<group>";
-		};
-		B1B00031EF0000300000031 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				B1B00011EF0000300000011 /* SportModels.swift */,
-				B1B00012EF0000300000012 /* FootballModels.swift */,
-				B1B00013EF0000300000013 /* BasketballModels.swift */,
-				B1B00014EF0000300000014 /* F1Models.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		B1B00032EF0000300000032 /* Providers */ = {
-			isa = PBXGroup;
-			children = (
-				B1B00015EF0000300000015 /* SportProvider.swift */,
-				B1B00016EF0000300000016 /* FootballProvider.swift */,
-				B1B00017EF0000300000017 /* BasketballProvider.swift */,
-				B1B00018EF0000300000018 /* EuroLeagueProvider.swift */,
-				B1B00019EF0000300000019 /* F1Provider.swift */,
-			);
-			path = Providers;
-			sourceTree = "<group>";
-		};
-		B1A0000A2EF0000200000010 /* Weather */ = {
-			isa = PBXGroup;
-			children = (
-				B1A000062EF0000200000006 /* WeatherManager.swift */,
-				B1A000072EF0000200000007 /* WeatherView.swift */,
-			);
-			path = Weather;
-			sourceTree = "<group>";
-		};
-		B1A000052EF0000100000005 /* Pomodoro */ = {
-			isa = PBXGroup;
-			children = (
-				B1A000012EF0000100000001 /* PomodoroManager.swift */,
-				B1A000022EF0000100000002 /* PomodoroView.swift */,
-			);
-			path = Pomodoro;
 			sourceTree = "<group>";
 		};
 		1471639B2C5D362F0068B555 /* components */ = {
@@ -852,6 +789,69 @@
 				B186543B2C6F49AE000B926A /* ShortcutConstants.swift */,
 			);
 			path = Shortcuts;
+			sourceTree = "<group>";
+		};
+		B1A000052EF0000100000005 /* Pomodoro */ = {
+			isa = PBXGroup;
+			children = (
+				B1A000012EF0000100000001 /* PomodoroManager.swift */,
+				B1A000022EF0000100000002 /* PomodoroView.swift */,
+			);
+			path = Pomodoro;
+			sourceTree = "<group>";
+		};
+		B1A0000A2EF0000200000010 /* Weather */ = {
+			isa = PBXGroup;
+			children = (
+				B1A000062EF0000200000006 /* WeatherManager.swift */,
+				B1A000072EF0000200000007 /* WeatherView.swift */,
+			);
+			path = Weather;
+			sourceTree = "<group>";
+		};
+		B1B00030EF0000300000030 /* Sports */ = {
+			isa = PBXGroup;
+			children = (
+				B1B00031EF0000300000031 /* Models */,
+				B1B00032EF0000300000032 /* Providers */,
+				B1B0001AEF000030000001A /* SportsManager.swift */,
+				B1B0001BEF000030000001B /* SportsView.swift */,
+				B1B0001CEF000030000001C /* SportsSettings.swift */,
+			);
+			path = Sports;
+			sourceTree = "<group>";
+		};
+		B1B00031EF0000300000031 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B1B00011EF0000300000011 /* SportModels.swift */,
+				B1B00012EF0000300000012 /* FootballModels.swift */,
+				B1B00013EF0000300000013 /* BasketballModels.swift */,
+				B1B00014EF0000300000014 /* F1Models.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		B1B00032EF0000300000032 /* Providers */ = {
+			isa = PBXGroup;
+			children = (
+				B1B00015EF0000300000015 /* SportProvider.swift */,
+				B1B00016EF0000300000016 /* FootballProvider.swift */,
+				B1B00017EF0000300000017 /* BasketballProvider.swift */,
+				B1B00018EF0000300000018 /* EuroLeagueProvider.swift */,
+				B1B00019EF0000300000019 /* F1Provider.swift */,
+			);
+			path = Providers;
+			sourceTree = "<group>";
+		};
+		B1C00040EF0000400000040 /* SystemMonitor */ = {
+			isa = PBXGroup;
+			children = (
+				B1C00031EF0000400000031 /* SystemMonitorManager.swift */,
+				B1C00032EF0000400000032 /* SystemMonitorView.swift */,
+				B1C00033EF0000400000033 /* SystemMonitorSettings.swift */,
+			);
+			path = SystemMonitor;
 			sourceTree = "<group>";
 		};
 		B1C448992C97375A001F0858 /* Tips */ = {
@@ -1167,7 +1167,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = CFN5NBGRUX;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BoringNotchXPCHelper/Info.plist;
@@ -1193,7 +1193,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = CFN5NBGRUX;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BoringNotchXPCHelper/Info.plist;
@@ -1350,7 +1350,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"boringNotch/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = CFN5NBGRUX;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -1404,7 +1404,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"boringNotch/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = CFN5NBGRUX;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (

@@ -36,7 +36,7 @@ struct SystemMonitorView: View {
         case .memoryBreakdown: MemoryWidget()
         case .networkLive: NetworkWidget()
         case .diskActivity: DiskWidget()
-        case .batteryHealth: BatteryHealthWidget()
+        case .batteryHealth: CPUOverviewWidget() // Deprecated; falls back to CPU
         }
     }
 }
@@ -341,14 +341,14 @@ private struct DiskWidget: View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
                 Image(systemName: "internaldrive")
-                    .font(.system(size: 9))
+                    .font(.system(size: 11))
                     .foregroundColor(diskColor)
                 Text("Disk")
-                    .font(.system(size: 9, weight: .medium))
+                    .font(.system(size: 11, weight: .medium))
                     .foregroundColor(.gray)
                 Spacer()
                 Text("\(Int(manager.diskUsagePercent))%")
-                    .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                    .font(.system(size: 12, weight: .semibold, design: .monospaced))
                     .foregroundColor(.white)
             }
 
@@ -363,16 +363,16 @@ private struct DiskWidget: View {
                         .animation(.easeInOut(duration: 0.4), value: manager.diskUsagePercent)
                 }
             }
-            .frame(height: 6)
+            .frame(height: 8)
 
             Text("\(SystemMonitorManager.formatGB(manager.diskUsedGB)) / \(SystemMonitorManager.formatGB(manager.diskTotalGB))")
-                .font(.system(size: 8, design: .monospaced))
+                .font(.system(size: 10, design: .monospaced))
                 .foregroundColor(.gray)
 
             Spacer(minLength: 0)
 
             // I/O speeds
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 3) {
                 ioRow(icon: "arrow.down.doc", label: String(localized: "Read"), value: SystemMonitorManager.formatSpeed(manager.diskReadSpeed), color: .green)
                 ioRow(icon: "arrow.up.doc", label: String(localized: "Write"), value: SystemMonitorManager.formatSpeed(manager.diskWriteSpeed), color: .orange)
             }
@@ -383,85 +383,16 @@ private struct DiskWidget: View {
     }
 
     private func ioRow(icon: String, label: String, value: String, color: Color) -> some View {
-        HStack(spacing: 4) {
-            Image(systemName: icon)
-                .font(.system(size: 7))
-                .foregroundColor(color)
+        HStack(spacing: 5) {
+            Circle().fill(color).frame(width: 6, height: 6)
             Text(label)
-                .font(.system(size: 8))
+                .font(.system(size: 10))
                 .foregroundColor(.gray)
             Spacer()
             Text(value)
-                .font(.system(size: 8, weight: .medium, design: .monospaced))
+                .font(.system(size: 10, weight: .medium, design: .monospaced))
                 .foregroundColor(.white)
                 .lineLimit(1)
-        }
-    }
-}
-
-// MARK: - Battery Health Widget
-
-private struct BatteryHealthWidget: View {
-    @ObservedObject var manager = SystemMonitorManager.shared
-
-    private var healthColor: Color {
-        if manager.batteryHealth > 80 { return .green }
-        if manager.batteryHealth > 60 { return .yellow }
-        return .red
-    }
-
-    var body: some View {
-        VStack(spacing: 6) {
-            // Health gauge
-            ZStack {
-                Circle()
-                    .stroke(Color.gray.opacity(0.15), lineWidth: 5)
-                Circle()
-                    .trim(from: 0, to: min(manager.batteryHealth / 100.0, 1.0))
-                    .stroke(
-                        AngularGradient(
-                            colors: [healthColor.opacity(0.6), healthColor],
-                            center: .center,
-                            startAngle: .degrees(-90),
-                            endAngle: .degrees(-90 + 360 * min(manager.batteryHealth / 100.0, 1.0))
-                        ),
-                        style: StrokeStyle(lineWidth: 5, lineCap: .round)
-                    )
-                    .rotationEffect(.degrees(-90))
-
-                VStack(spacing: 0) {
-                    Text("\(Int(manager.batteryHealth))%")
-                        .font(.system(size: 14, weight: .semibold, design: .monospaced))
-                        .foregroundColor(.white)
-                    Text("Health")
-                        .font(.system(size: 7, weight: .medium))
-                        .foregroundColor(healthColor)
-                }
-            }
-            .frame(width: 56, height: 56)
-
-            VStack(spacing: 2) {
-                statRow(label: String(localized: "Cycles"), value: "\(manager.batteryCycleCount)")
-                statRow(label: String(localized: "Status"), value: manager.batteryCondition)
-                if let temp = manager.batteryTemperature {
-                    statRow(label: String(localized: "Temp"), value: String(format: "%.0f\u{00B0}C", temp))
-                }
-            }
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(6)
-        .background(RoundedRectangle(cornerRadius: 10).fill(Color.white.opacity(0.04)))
-    }
-
-    private func statRow(label: String, value: String) -> some View {
-        HStack {
-            Text(label)
-                .font(.system(size: 8))
-                .foregroundColor(.gray)
-            Spacer()
-            Text(value)
-                .font(.system(size: 8, weight: .medium, design: .monospaced))
-                .foregroundColor(.white)
         }
     }
 }

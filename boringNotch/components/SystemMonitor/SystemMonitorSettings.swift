@@ -14,6 +14,10 @@ struct SystemMonitorSettings: View {
     @Default(.sysMonSlot2) var slot2
     @Default(.sysMonSlot3) var slot3
 
+    private var availableWidgets: [SystemMonitorWidgetKind] {
+        SystemMonitorWidgetKind.allCases.filter { $0 != .batteryHealth }
+    }
+
     var body: some View {
         Form {
             Section {
@@ -24,19 +28,19 @@ struct SystemMonitorSettings: View {
 
             Section {
                 Picker("Slot 1", selection: $slot1) {
-                    ForEach(SystemMonitorWidgetKind.allCases, id: \.self) { kind in
+                    ForEach(availableWidgets, id: \.self) { kind in
                         Text(kind.label).tag(kind)
                     }
                 }
 
                 Picker("Slot 2", selection: $slot2) {
-                    ForEach(SystemMonitorWidgetKind.allCases, id: \.self) { kind in
+                    ForEach(availableWidgets, id: \.self) { kind in
                         Text(kind.label).tag(kind)
                     }
                 }
 
                 Picker("Slot 3", selection: $slot3) {
-                    ForEach(SystemMonitorWidgetKind.allCases, id: \.self) { kind in
+                    ForEach(availableWidgets, id: \.self) { kind in
                         Text(kind.label).tag(kind)
                     }
                 }
