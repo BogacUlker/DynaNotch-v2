@@ -88,7 +88,15 @@ final class FootballProvider: SportProvider {
     }
 
     func liveEvents() -> [SportEvent] {
-        matches.filter(\.isLive).map { match in
+        let fav = Defaults[.sportsFavoriteFootballTeam]
+        let liveMatches = matches.filter(\.isLive)
+        let filtered: [FootballMatch]
+        if !fav.isEmpty, let favMatch = liveMatches.first(where: { $0.homeAbbrev == fav || $0.awayAbbrev == fav }) {
+            filtered = [favMatch]
+        } else {
+            filtered = liveMatches
+        }
+        return filtered.map { match in
             SportEvent(
                 id: "fb-\(match.id)",
                 type: .football,

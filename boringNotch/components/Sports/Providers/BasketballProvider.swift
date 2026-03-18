@@ -59,9 +59,18 @@ final class BasketballProvider: SportProvider {
     }
 
     func liveEvents() -> [SportEvent] {
+        let favs = favoriteAbbrevs
         var events: [SportEvent] = []
         if Defaults[.enableBasketball] {
-            events.append(contentsOf: nbaGames.filter(\.isLive).map { game in
+            let liveNBA = nbaGames.filter(\.isLive)
+            let nbaFav = Defaults[.sportsFavoriteBasketballTeam]
+            let filteredNBA: [BasketballGame]
+            if !nbaFav.isEmpty, let favGame = liveNBA.first(where: { $0.homeAbbrev == nbaFav || $0.awayAbbrev == nbaFav }) {
+                filteredNBA = [favGame]
+            } else {
+                filteredNBA = liveNBA
+            }
+            events.append(contentsOf: filteredNBA.map { game in
                 SportEvent(
                     id: "bb-\(game.id)",
                     type: .basketball,

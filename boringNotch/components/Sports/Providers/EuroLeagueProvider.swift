@@ -5,6 +5,7 @@
 //  Fetches EuroLeague basketball data from the v1 XML API.
 //
 
+import Defaults
 import Foundation
 import os
 
@@ -151,7 +152,15 @@ final class EuroLeagueProvider {
     }
 
     func liveEvents() -> [SportEvent] {
-        games.filter(\.isLive).map { game in
+        let fav = Defaults[.sportsFavoriteEuroLeagueTeam]
+        let liveGames = games.filter(\.isLive)
+        let filtered: [BasketballGame]
+        if !fav.isEmpty, let favGame = liveGames.first(where: { $0.homeAbbrev == fav || $0.awayAbbrev == fav }) {
+            filtered = [favGame]
+        } else {
+            filtered = liveGames
+        }
+        return filtered.map { game in
             SportEvent(
                 id: "el-\(game.id)",
                 type: .basketball,

@@ -79,7 +79,13 @@ private struct FootballLiveWidget: View {
     @ObservedObject var manager = SportsManager.shared
     @Default(.sportsFavoriteFootballTeam) var favoriteTeam
     var body: some View {
-        let live = manager.footballProvider.matches.filter(\.isLive)
+        let allLive = manager.footballProvider.matches.filter(\.isLive)
+        let live: [FootballMatch] = {
+            if !favoriteTeam.isEmpty, let favMatch = allLive.first(where: { $0.homeAbbrev == favoriteTeam || $0.awayAbbrev == favoriteTeam }) {
+                return [favMatch]
+            }
+            return allLive
+        }()
         VStack(spacing: 3) {
             HStack(spacing: 4) {
                 if !live.isEmpty { LiveDot() }
@@ -197,8 +203,15 @@ private struct FootballStandingsWidget: View {
 private struct BasketballLiveWidget: View {
     @ObservedObject var manager = SportsManager.shared
     var body: some View {
-        let live = manager.basketballProvider.games.filter(\.isLive)
+        let allLive = manager.basketballProvider.games.filter(\.isLive)
         let favs = manager.basketballProvider.favoriteAbbrevs
+        let live: [BasketballGame] = {
+            if !favs.isEmpty {
+                let favGames = allLive.filter { favs.contains($0.homeAbbrev) || favs.contains($0.awayAbbrev) }
+                if !favGames.isEmpty { return favGames }
+            }
+            return allLive
+        }()
         VStack(spacing: 3) {
             HStack(spacing: 4) {
                 if !live.isEmpty { LiveDot() }
