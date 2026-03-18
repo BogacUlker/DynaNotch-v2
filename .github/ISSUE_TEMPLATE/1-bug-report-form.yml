@@ -31,10 +31,10 @@ body:
     id: version
     attributes:
       label: DynaNotch Version
-      description: >-
-        What version are you running? (Check in the menu bar > Settings > About)
+      description: What version are you running? (Check in the menu bar > Settings > About)
       options:
         - Select a version
+        - v1.0.2
         - v1.0.0
     validations:
       required: true
