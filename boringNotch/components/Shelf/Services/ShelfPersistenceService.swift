@@ -42,18 +42,26 @@ final class ShelfPersistenceService {
     }
 
     func load() -> [ShelfItem] {
-        guard let data = try? Data(contentsOf: fileURL) else { return [] }
-        
+        let data: Data
+        do {
+            data = try Data(contentsOf: fileURL)
+        } catch {
+            logger.info("No shelf data file found or unreadable: \(error.localizedDescription)")
+            return []
+        }
+
         // Try to decode as array first (normal case)
-        if let items = try? decoder.decode([ShelfItem].self, from: data) {
-            return items
+        do {
+            return try decoder.decode([ShelfItem].self, from: data)
+        } catch {
+            logger.warning("Array decode failed, attempting item-by-item recovery: \(error.localizedDescription)")
         }
         
         // If array decoding fails, try to decode individual items
         do {
             // Parse as JSON array to get individual item data
             guard let jsonArray = try JSONSerialization.jsonObject(with: data) as? [Any] else {
-                print("⚠️ Shelf persistence file is not a valid JSON array")
+                logger.warning("Shelf persistence file is not a valid JSON array")
                 return []
             }
             
@@ -67,17 +75,17 @@ final class ShelfPersistenceService {
                     validItems.append(item)
                 } catch {
                     failedCount += 1
-                    print("⚠️ Failed to decode shelf item at index \(index): \(error.localizedDescription)")
+                    logger.warning("Failed to decode shelf item at index \(index): \(error.localizedDescription)")
                 }
             }
             
             if failedCount > 0 {
-                print("📦 Successfully loaded \(validItems.count) shelf items, discarded \(failedCount) corrupted items")
+                logger.info("Loaded \(validItems.count) shelf items, discarded \(failedCount) corrupted items")
             }
             
             return validItems
         } catch {
-            print("❌ Failed to parse shelf persistence file: \(error.localizedDescription)")
+            logger.error("Failed to parse shelf persistence file: \(error.localizedDescription)")
             return []
         }
     }

@@ -69,17 +69,19 @@ class CalendarManager: ObservableObject {
 
         switch status {
         case .notDetermined:
-            guard let granted = try? await calendarService.requestAccess(to: .event) else {
+            do {
+                let granted = try await calendarService.requestAccess(to: .event)
+                self.calendarAuthorizationStatus = granted ? .fullAccess : .denied
+                if granted {
+                    await reloadCalendarAndReminderLists()
+                    events = await calendarService.events(
+                        from: currentWeekStartDate,
+                        to: Calendar.current.date(byAdding: .day, value: 1, to: currentWeekStartDate)!,
+                        calendars: selectedCalendars.map { $0.id })
+                }
+            } catch {
+                NSLog("Calendar access request failed: %@", error.localizedDescription)
                 self.calendarAuthorizationStatus = .notDetermined
-                return
-            }
-            self.calendarAuthorizationStatus = granted ? .fullAccess : .denied
-            if granted {
-                await reloadCalendarAndReminderLists()
-                events = await calendarService.events(
-                    from: currentWeekStartDate,
-                    to: Calendar.current.date(byAdding: .day, value: 1, to: currentWeekStartDate)!,
-                    calendars: selectedCalendars.map { $0.id })
             }
         case .restricted, .denied:
             NSLog("Calendar access denied or restricted")
@@ -103,13 +105,15 @@ class CalendarManager: ObservableObject {
 
         switch status {
         case .notDetermined:
-            guard let granted = try? await calendarService.requestAccess(to: .reminder) else {
+            do {
+                let granted = try await calendarService.requestAccess(to: .reminder)
+                self.reminderAuthorizationStatus = granted ? .fullAccess : .denied
+                if granted {
+                    await reloadCalendarAndReminderLists()
+                }
+            } catch {
+                NSLog("Reminder access request failed: %@", error.localizedDescription)
                 self.reminderAuthorizationStatus = .notDetermined
-                return
-            }
-            self.reminderAuthorizationStatus = granted ? .fullAccess : .denied
-            if granted {
-                await reloadCalendarAndReminderLists()
             }
         case .restricted, .denied:
             NSLog("Reminder access denied or restricted")

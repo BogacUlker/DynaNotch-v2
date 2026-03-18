@@ -288,6 +288,16 @@ class BoringViewCoordinator: ObservableObject {
         }
     }
     
+    deinit {
+        if let observer = accessibilityObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        hudReplacementCancellable?.cancel()
+        hudEnableTask?.cancel()
+        sneakPeekTask?.cancel()
+        expandingViewTask?.cancel()
+    }
+
     func showEmpty() {
         currentView = .home
     }

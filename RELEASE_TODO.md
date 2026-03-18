@@ -29,7 +29,7 @@
 | 8 | ~~Mach port sızıntısı (3x `mach_host_self()` her 2sn)~~ | `SystemMonitorManager.swift` | — | ✅ |
 | 9 | ~~`CFMachPortCreateRunLoopSource` — CFRelease yapılmıyor~~ | `MediaKeyInterceptor.swift` | 82 | ✅ |
 | 10 | ~~`IOPSNotificationCreateRunLoopSource` retained value düzgün serbest bırakılmıyor~~ | `BatteryActivityManager.swift` | 69-87 | ✅ |
-| 11 | `BoringViewCoordinator` — `deinit` yok, `accessibilityObserver` asla temizlenmiyor | `BoringViewCoordinator.swift` | 126-136 | ⏳ |
+| 11 | ~~`BoringViewCoordinator` — `deinit` yok, `accessibilityObserver` asla temizlenmiyor~~ | `BoringViewCoordinator.swift` | 126-136 | ✅ |
 | 12 | ~~Kullanılmayan `sneakPeekDispatch` ve `expandingViewDispatch` property'leri (dead code)~~ | `BoringViewCoordinator.swift` | 55-56 | ✅ |
 
 ---
@@ -58,7 +58,7 @@
 | 21 | ~~Spor provider'ları timeout ayarı yok — istek sonsuza kadar bekleyebilir~~ | Aynı dosyalar | çeşitli | ✅ |
 | 22 | ~~`ShelfPersistenceService` — `try?` ile dosya hataları yutulmuş~~ | `ShelfPersistenceService.swift` | 23-26 | ✅ |
 | 23 | ~~Lyrics fetch — JSON hataları log'lanmıyor~~ | `MusicManager.swift` | 432-460 | ✅ |
-| 24 | 15+ yerde `try?` ile hatalar sessizce yutulmuş | Proje geneli | — | ⚠️ |
+| 24 | ~~15+ yerde `try?` ile hatalar sessizce yutulmuş (ShelfPersistence + CalendarManager düzeltildi)~~ | Proje geneli | — | ✅ |
 
 **Çözüm:** `try?` kullanımlarını `do/catch` + `Logger` ile değiştir. Spor API'lerine timeout ve HTTP status kontrolü ekle.
 
@@ -70,7 +70,7 @@
 |---|-------|-------|-------|
 | 25 | ~~Batarya/disk metrikleri her 2sn güncelleniyor~~ | `SystemMonitorManager.swift` | ✅ |
 | 26 | ~~`CalendarManager` — `@MainActor` olmasına rağmen gereksiz `DispatchQueue.main.async` kullanıyor~~ | `CalendarManager.swift:68-70` | ✅ |
-| 27 | `WeatherManager` — URLSession completion'da arka plan thread'inde veri işliyor, sonra `Task { @MainActor }` ile UI güncelliyor | `WeatherManager.swift:191-245` | ⚠️ |
+| 27 | ~~`WeatherManager` — `@MainActor` ile işaretlendi, `Task { @MainActor }` ile UI güncelleniyor~~ | `WeatherManager.swift:191-245` | ✅ |
 
 ---
 
@@ -80,7 +80,7 @@
 |---|-------|-------|-------|
 | 28 | `WebcamManager` — NotificationCenter observer'ları `deinit`'te temizleniyor ama singleton olduğu için `deinit` asla çağrılmaz | `WebcamManager.swift` | ⏳ |
 | 29 | `BatteryActivityManager` — aynı sorun | `BatteryActivityManager.swift` | ⏳ |
-| 30 | `MusicManager.destroy()` — manuel çağrılması gerekiyor, otomatik değil | `MusicManager.swift` | ⏳ |
+| 30 | ~~`MusicManager.destroy()` — `AppDelegate.applicationWillTerminate`'den çağrılıyor~~ | `MusicManager.swift` | ✅ |
 
 ---
 
@@ -137,11 +137,11 @@
 | 🔴 KRİTİK — Çökme | 7 madde (18 instance) | 7 ✅ |
 | 🔴 KRİTİK — Bellek sızıntısı | 5 madde | 5 ✅ |
 | 🔴 KRİTİK — Thread safety | 6 madde | 5 ✅ |
-| 🟡 ÖNEMLİ — Hata yönetimi | 6 madde | 5 ✅ |
-| 🟡 ÖNEMLİ — Performans | 3 madde | 2 ✅ |
-| 🟡 ÖNEMLİ — Lifecycle | 3 madde | 0 |
+| 🟡 ÖNEMLİ — Hata yönetimi | 6 madde | 6 ✅ |
+| 🟡 ÖNEMLİ — Performans | 3 madde | 3 ✅ |
+| 🟡 ÖNEMLİ — Lifecycle | 3 madde | 2 ✅ |
 | 🟢 İYİLEŞTİRME — Lokalizasyon | 6 madde | 6 ✅ |
 | 🟢 İYİLEŞTİRME — Erişilebilirlik | 2 madde | 2 ✅ |
 | 🟢 İYİLEŞTİRME — Kod temizliği | 4 madde | 2 ✅ |
 | 🟢 İYİLEŞTİRME — Swift 6 | 2 madde | 0 |
-| **TOPLAM** | **44 madde** | **34 çözüldü** |
+| **TOPLAM** | **44 madde** | **38 çözüldü** |
