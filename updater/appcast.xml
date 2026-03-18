@@ -2,6 +2,23 @@
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
         <item>
+            <title>1.0.2</title>
+            <pubDate>Tue, 18 Mar 2026 11:46:00 +0000</pubDate>
+            <link>https://github.com/BogacUlker/DynaNotch-v2/releases</link>
+            <sparkle:version>3</sparkle:version>
+            <sparkle:shortVersionString>1.0.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <description><![CDATA[
+<h2>DynaNotch v1.0.2</h2>
+<ul>
+    <li>Sports: Live scores now show only your favorite team's match</li>
+    <li>Fixed resource cleanup in BoringViewCoordinator</li>
+    <li>Improved error logging for Shelf persistence and Calendar access</li>
+</ul>
+]]></description>
+            <enclosure url="https://github.com/BogacUlker/DynaNotch-v2/releases/download/v1.0.2/DynaNotch-1.0.2.dmg" length="9311705" type="application/octet-stream"/>
+        </item>
+        <item>
             <title>1.0.0</title>
             <pubDate>Tue, 11 Mar 2026 17:37:00 +0000</pubDate>
             <link>https://github.com/BogacUlker/DynaNotch-v2/releases</link>
